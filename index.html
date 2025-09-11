@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قیمت‌یار پروتئین</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://v1.fontapi.ir/css/Vazir" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Vazir', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .page { display: none; }
+        .page.active { display: flex; flex-direction: column; min-height: 100vh; }
+        .chart-bar-wrapper { position: relative; }
+        .chart-tooltip {
+            display: none;
+            position: absolute;
+            bottom: 105%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #1f2937;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 10;
+        }
+        .chart-bar-wrapper:hover .chart-tooltip { display: block; }
+        .chart-bar { transition: height 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+
+        /* Toast Notification Styles */
+        #toast {
+            position: fixed;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: bottom 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 9999;
+        }
+        #toast.show {
+            bottom: 30px;
+        }
+        #toast.success { background-color: #059669; } /* Green */
+        #toast.error { background-color: #e11d48; } /* Red */
+
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <div class="max-w-md mx-auto bg-white shadow-2xl rounded-b-2xl min-h-screen flex flex-col">
+
+        <!-- Loading Spinner -->
+        <div id="loading-spinner" class="page active justify-center items-center p-8">
+            <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-teal-600"></div>
+        </div>
+        
+        <!-- Error Page -->
+        <div id="error-page" class="page justify-center items-center p-8 text-center">
+            <p id="error-message" class="text-red-500"></p>
+        </div>
+
+        <!-- MODIFIED: Login Page -->
+        <div id="login-page" class="page justify-center items-center p-8">
+            <div class="w-full">
+                <h1 class="text-4xl font-bold text-teal-600 mb-2 text-center">قیمت‌یار پروتئین</h1>
+                <p class="text-gray-500 mb-10 text-center">ورود یا ثبت‌نام در پنل</p>
+                <form id="login-form" class="w-full space-y-4">
+                    <input id="mobile-input" type="tel" placeholder="شماره موبایل (مثلاً 09123456789)" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition" dir="ltr">
+                    <input id="brand-name-input" type="text" placeholder="نام برند شما (برای ثبت‌نام)" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition disabled:bg-gray-100 disabled:cursor-not-allowed">
+                    <input id="city-input" list="city-list" placeholder="شهر شما (برای ثبت‌نام)" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition disabled:bg-gray-100 disabled:cursor-not-allowed">
+                    <datalist id="city-list"></datalist>
+                    <input id="passcode-input" type="password" inputmode="numeric" placeholder="رمز عبور ۴ رقمی" maxlength="4" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition tracking-[0.5em] text-center" dir="ltr">
+
+                    <button id="login-button" type="submit" class="w-full !mt-6 py-3 px-4 rounded-lg font-bold text-lg transition-transform transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed bg-teal-600 hover:bg-teal-700 text-white">ورود / ثبت‌نام</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Home Page -->
+        <div id="home-page" class="page">
+             <div class="bg-white shadow-sm p-4 sticky top-0 z-10 flex items-center"> <h1 id="header-title" class="text-xl font-bold text-gray-800 flex-grow"></h1> </div>
+            <div class="p-6 space-y-6 flex-grow">
+                <div class="bg-white rounded-xl shadow-md p-6 text-center">
+                    <h2 class="text-2xl font-bold text-gray-800">وضعیت مشارکت شما</h2>
+                    <p id="submission-status" class="mt-2 text-lg font-semibold"></p>
+                </div>
+                <button id="go-to-submit-button" class="w-full py-3 px-4 rounded-lg font-bold text-lg transition-transform transform active:scale-95 bg-teal-600 hover:bg-teal-700 text-white"></button>
+                <button id="go-to-report-button" class="w-full py-3 px-4 rounded-lg font-bold text-lg transition-transform transform active:scale-95 bg-gray-200 hover:bg-gray-300 text-gray-800">مشاهده گزارش بازار</button>
+            </div>
+            <div class="p-6"> <button id="logout-button" class="w-full py-3 px-4 rounded-lg font-bold text-lg transition-transform transform active:scale-95 bg-red-500 hover:bg-red-600 text-white">خروج از حساب کاربری</button> </div>
+        </div>
+        
+        <!-- Submit Price Page -->
+        <div id="submit-price-page" class="page">
+            <div class="bg-white shadow-sm p-4 sticky top-0 z-10 flex items-center">
+                <button id="submit-back-button" class="text-teal-600 ml-4"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> </button>
+                <h1 id="submit-page-title" class="text-xl font-bold text-gray-800 flex-grow"></h1>
+            </div>
+            <form id="submit-price-form" class="p-6 space-y-4">
+                <div> <label class="font-semibold text-gray-700 mb-2 block">۱. انتخاب دسته‌بندی</label> <select id="submit-category-select" class="w-full p-3 border border-gray-300 rounded-lg bg-white"></select> </div>
+                <div> <label class="font-semibold text-gray-700 mb-2 block">۲. انتخاب محصول</label> <select id="submit-template-select" class="w-full p-3 border border-gray-300 rounded-lg bg-white"></select> </div>
+                <div> <label class="font-semibold text-gray-700 mb-2 block">۳. انتخاب بسته‌بندی فروش</label> <select id="submit-variant-select" class="w-full p-3 border border-gray-300 rounded-lg bg-white"></select> </div>
+                <div>
+                    <label class="font-semibold text-gray-700 mb-2 block">۴. قیمت فروش بسته (به تومان)</label>
+                    <input id="submit-price-input" type="text" inputmode="numeric" placeholder="مثلاً: ۱۵۰,۰۰۰" class="w-full p-3 border border-gray-300 rounded-lg">
+                    <p id="standard-price-display" class="text-sm text-teal-700 mt-2 bg-teal-50 p-2 rounded-md hidden"></p>
+                </div>
+                <div class="pt-4"> <button id="submit-price-button" type="submit" class="w-full py-3 px-4 rounded-lg font-bold text-lg bg-teal-600 text-white">قفل قیمت این ماه</button> </div>
+            </form>
+        </div>
+        
+        <!-- Market Report Page -->
+        <div id="market-report-page" class="page">
+             <div class="bg-white shadow-sm p-4 sticky top-0 z-10 flex items-center">
+                <button id="report-back-button" class="text-teal-600 ml-4"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> </button>
+                <h1 class="text-xl font-bold text-gray-800 flex-grow">گزارش بازار</h1>
+            </div>
+            <div id="report-access-denied" class="flex-grow flex flex-col items-center justify-center p-8 text-center hidden">
+                <div class="bg-orange-100 border-r-4 border-orange-500 text-orange-700 p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-bold mb-2">دسترسی محدود است</h2>
+                    <p class="mb-6">طبق اصل «داده در برابر داده»، برای مشاهده گزارش‌های بازار، ابتدا باید قیمت محصولات خود را برای این ماه ثبت کنید.</p>
+                    <button id="report-go-to-submit-button" class="w-full py-3 px-4 rounded-lg font-bold text-lg bg-teal-600 hover:bg-teal-700 text-white">رفتن به صفحه ثبت قیمت</button>
+                </div>
+            </div>
+            <div id="report-content" class="p-6 space-y-4 hidden">
+                 <div class="grid grid-cols-2 gap-4">
+                    <div> <label class="font-semibold text-gray-700 mb-2 block">محصول</label> <select id="report-template-select" class="w-full p-3 border border-gray-300 rounded-lg bg-white"></select> </div>
+                    <div> <label class="font-semibold text-gray-700 mb-2 block">شهر</label> <select id="report-city-select" class="w-full p-3 border border-gray-300 rounded-lg bg-white"></select> </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <div id="report-loader" class="flex justify-center items-center p-8"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div></div>
+                    <div id="report-data-view" class="hidden">
+                        <h3 id="report-title" class="text-xl font-bold text-center mb-1 text-gray-800"></h3>
+                        <p id="report-subtitle" class="text-center text-sm text-gray-500 mb-6"></p>
+                        <div class="grid grid-cols-2 gap-4 text-center mb-6">
+                           <div class="bg-gray-100 p-3 rounded-lg"><div class="text-sm text-gray-600">کمینه</div><div id="report-min" class="font-bold text-lg"></div></div>
+                           <div class="bg-gray-100 p-3 rounded-lg"><div class="text-sm text-gray-600">بیشینه</div><div id="report-max" class="font-bold text-lg"></div></div>
+                        </div>
+                        <div class="bg-teal-50 p-4 rounded-lg text-center mb-6">
+                            <div class="text-md text-teal-800">قیمت میانه (شاخص اصلی)</div>
+                            <div class="font-extrabold text-3xl text-teal-700 my-1"><span id="report-median"></span> <span class="text-lg">تومان</span></div>
+                        </div>
+                        <div class="mt-4 h-64 w-full"> <div id="chart-container" class="w-full h-full flex justify-around items-end border-l border-b border-gray-200 pl-2"></div> </div>
+                    </div>
+                    <div id="report-no-data" class="text-center p-8 hidden">
+                        <h3 class="font-bold text-lg text-gray-600">گزارشی یافت نشد</h3>
+                        <p class="text-gray-500 mt-2">برای این محصول و شهر هنوز به تعداد کافی گزارش ثبت نشده است.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Element -->
+    <div id="toast"></div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+        // --- Supabase Configuration ---
+        const supabaseUrl = 'https://ldhjszxmqnpvozlbxbmn.supabase.co';
+        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkaGpzenhtcW5wdm96bGJ4Ym1uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0NDc0MDIsImV4cCI6MjA3MzAyMzQwMn0.LDFjHy371d3-FAumHhsAGRhLQAfO5kxYVp5sMCRJgZw';
+        const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+        // --- State Variables ---
+        let user = null;
+        let hasSubmitted = false;
+        let appData = { categories: [], templates: [], variants: [], cities: [] };
+        
+        // --- DOM Elements ---
+        const pages = document.querySelectorAll('.page');
+        const dom = {
+            loadingSpinner: document.getElementById('loading-spinner'),
+            errorPage: document.getElementById('error-page'),
+            errorMessage: document.getElementById('error-message'),
+            loginPage: document.getElementById('login-page'),
+            loginForm: document.getElementById('login-form'),
+            mobileInput: document.getElementById('mobile-input'),
+            brandNameInput: document.getElementById('brand-name-input'),
+            cityInput: document.getElementById('city-input'),
+            passcodeInput: document.getElementById('passcode-input'),
+            cityList: document.getElementById('city-list'),
+            loginButton: document.getElementById('login-button'),
+            homePage: document.getElementById('home-page'),
+            headerTitle: document.getElementById('header-title'),
+            submissionStatus: document.getElementById('submission-status'),
+            goToSubmitButton: document.getElementById('go-to-submit-button'),
+            goToReportButton: document.getElementById('go-to-report-button'),
+            logoutButton: document.getElementById('logout-button'),
+            submitPricePage: document.getElementById('submit-price-page'),
+            submitPageTitle: document.getElementById('submit-page-title'),
+            submitBackButton: document.getElementById('submit-back-button'),
+            submitPriceForm: document.getElementById('submit-price-form'),
+            submitCategorySelect: document.getElementById('submit-category-select'),
+            submitTemplateSelect: document.getElementById('submit-template-select'),
+            submitVariantSelect: document.getElementById('submit-variant-select'),
+            submitPriceInput: document.getElementById('submit-price-input'),
+            standardPriceDisplay: document.getElementById('standard-price-display'),
+            submitPriceButton: document.getElementById('submit-price-button'),
+            marketReportPage: document.getElementById('market-report-page'),
+            reportBackButton: document.getElementById('report-back-button'),
+            reportAccessDenied: document.getElementById('report-access-denied'),
+            reportGoToSubmitButton: document.getElementById('report-go-to-submit-button'),
+            reportContent: document.getElementById('report-content'),
+            reportTemplateSelect: document.getElementById('report-template-select'),
+            reportCitySelect: document.getElementById('report-city-select'),
+            reportLoader: document.getElementById('report-loader'),
+            reportDataView: document.getElementById('report-data-view'),
+            reportTitle: document.getElementById('report-title'),
+            reportSubtitle: document.getElementById('report-subtitle'),
+            reportMin: document.getElementById('report-min'),
+            reportMax: document.getElementById('report-max'),
+            reportMedian: document.getElementById('report-median'),
+            chartContainer: document.getElementById('chart-container'),
+            reportNoData: document.getElementById('report-no-data'),
+            toast: document.getElementById('toast'),
+        };
+
+        // --- Helper Functions ---
+        const formatNumber = (num) => num ? num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : '۰';
+        const toEnglishNumerals = (str) => {
+            if (!str) return '';
+            return str.toString().replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+        };
+        const showPage = (pageId) => {
+            pages.forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+        };
+        const showError = (message) => {
+            dom.errorMessage.textContent = message;
+            showPage('error-page');
+        };
+        const getCurrentPersianMonth = () => {
+            const date = new Date();
+            const month = date.toLocaleDateString('fa-IR', { month: 'long' });
+            const year = date.toLocaleDateString('fa-IR', { year: 'numeric' });
+            return `${month} ${year}`;
+        };
+        const showToast = (message, type = 'success') => {
+            dom.toast.textContent = message;
+            dom.toast.className = type; // 'success' or 'error'
+            dom.toast.classList.add('show');
+            setTimeout(() => { dom.toast.classList.remove('show'); }, 3000);
+        };
+        
+        // --- UI Update Functions ---
+        function updateHomePageUI() {
+            dom.headerTitle.textContent = `خوش آمدید، ${user.brand_name}`;
+            const currentMonth = getCurrentPersianMonth();
+            if (hasSubmitted) {
+                dom.submissionStatus.textContent = `✅ قیمت ${currentMonth} ثبت شده است.`;
+                dom.submissionStatus.className = 'mt-2 text-lg font-semibold text-green-600';
+                dom.goToSubmitButton.textContent = `ویرایش قیمت ${currentMonth}`;
+            } else {
+                dom.submissionStatus.textContent = `❌ قیمت ${currentMonth} هنوز ثبت نشده.`;
+                dom.submissionStatus.className = 'mt-2 text-lg font-semibold text-red-500';
+                dom.goToSubmitButton.textContent = `ثبت قیمت ${currentMonth}`;
+            }
+        }
+        
+        function populateSelect(selectElement, items, valueField = 'id', textField = 'name', prompt = '') {
+            selectElement.innerHTML = '';
+            if (prompt) {
+                const option = document.createElement('option'); option.value = ''; option.textContent = prompt; option.disabled = true;
+                selectElement.appendChild(option);
+            }
+            items.forEach(item => {
+                const option = document.createElement('option'); option.value = item[valueField]; option.textContent = item[textField];
+                selectElement.appendChild(option);
+            });
+        }
+        
+        function populateDatalist(datalistElement, items, valueField = 'name') {
+            datalistElement.innerHTML = '';
+            items.forEach(item => {
+                const option = document.createElement('option'); option.value = item[valueField];
+                datalistElement.appendChild(option);
+            });
+        }
+
+        function updateSubmitVariantsUI() {
+            const selectedTemplateId = Number(dom.submitTemplateSelect.value);
+            const variants = appData.variants.filter(v => v.template_id === selectedTemplateId);
+            populateSelect(dom.submitVariantSelect, variants, 'id', 'name', 'یک گزینه را انتخاب کنید');
+            dom.submitPriceInput.value = '';
+            dom.standardPriceDisplay.classList.add('hidden');
+        }
+
+        function updateSubmitPageUI() {
+            const selectedCategoryId = Number(dom.submitCategorySelect.value);
+            const templates = appData.templates.filter(t => t.category_id === selectedCategoryId);
+            populateSelect(dom.submitTemplateSelect, templates);
+            updateSubmitVariantsUI();
+        }
+
+        function renderChart(data) {
+            dom.chartContainer.innerHTML = '';
+            const values = [data.min, data.p25, data.median, data.p75, data.max];
+            const labels = ['کمینه', 'چارک اول', 'میانه', 'چارک سوم', 'بیشینه'];
+            const maxValue = Math.max(...values);
+            
+            values.forEach((value, index) => {
+                const barWrapper = document.createElement('div');
+                barWrapper.className = 'chart-bar-wrapper flex flex-col items-center h-full justify-end w-1/5';
+                const tooltip = document.createElement('div');
+                tooltip.className = 'chart-tooltip'; tooltip.textContent = formatNumber(value);
+                const bar = document.createElement('div');
+                const barHeight = (value / maxValue) * 100;
+                bar.className = 'chart-bar w-1/2 rounded-t-md cursor-pointer';
+                bar.style.height = '0%';
+                setTimeout(() => bar.style.height = `${barHeight}%`, 100);
+                bar.style.backgroundColor = labels[index] === 'میانه' ? '#0d9488' : '#64c4bc';
+                const label = document.createElement('div');
+                label.className = 'text-xs text-gray-500 mt-2'; label.textContent = labels[index];
+                barWrapper.appendChild(tooltip); barWrapper.appendChild(bar); barWrapper.appendChild(label);
+                dom.chartContainer.appendChild(barWrapper);
+            });
+        }
+
+        // --- NEW --- Auto-fill for returning users
+        async function checkUserOnMobileInput() {
+            const mobile = toEnglishNumerals(dom.mobileInput.value).trim();
+            const iranianMobileRegex = /^09\d{9}$/;
+
+            // Reset form state for every check
+            dom.brandNameInput.value = '';
+            dom.cityInput.value = '';
+            dom.brandNameInput.disabled = false;
+            dom.cityInput.disabled = false;
+
+            if (!iranianMobileRegex.test(mobile)) {
+                return; // Not a valid number yet, do nothing
+            }
+
+            try {
+                let { data: existingUser, error } = await supabase
+                    .from('users').select('brand_name, city_id').eq('mobile_number', mobile).single();
+
+                if (error && error.code !== 'PGRST116') throw error;
+
+                if (existingUser) { // Returning user found
+                    dom.brandNameInput.value = existingUser.brand_name;
+                    const cityObj = appData.cities.find(c => c.id === existingUser.city_id);
+                    if (cityObj) {
+                        dom.cityInput.value = cityObj.name;
+                    }
+                    dom.brandNameInput.disabled = true; // Lock the fields
+                    dom.cityInput.disabled = true;
+                    showToast('کاربر شناسایی شد. لطفاً رمز عبور را وارد کنید.');
+                    dom.passcodeInput.focus();
+                } else { // New user
+                    showToast('کاربر جدید! لطفاً اطلاعات خود را تکمیل کنید.');
+                    dom.brandNameInput.focus();
+                }
+            } catch (error) {
+                console.error("Error checking mobile number:", error);
+                showToast("خطا در بررسی شماره موبایل.", "error");
+            }
+        }
+
+
+        // --- REWRITTEN Event Handlers & Logic for new Auth ---
+        async function handleLogin(e) {
+            e.preventDefault();
+            const mobile = toEnglishNumerals(dom.mobileInput.value).trim();
+            const brandName = dom.brandNameInput.value.trim();
+            const cityName = dom.cityInput.value.trim();
+            const passcode = toEnglishNumerals(dom.passcodeInput.value).trim();
+
+            // --- Validation ---
+            const iranianMobileRegex = /^09\d{9}$/;
+            if (!iranianMobileRegex.test(mobile)) {
+                showToast("لطفا شماره موبایل معتبر (مثال: 09123456789) وارد کنید.", "error");
+                return;
+            }
+            // --- MODIFIED: Passcode is now mandatory ---
+            if (!passcode || passcode.length !== 4) {
+                showToast("رمز عبور ۴ رقمی الزامی است.", "error");
+                return;
+            }
+
+            dom.loginButton.disabled = true;
+            dom.loginButton.textContent = 'در حال بررسی...';
+
+            try {
+                // Check if user exists
+                let { data: existingUser, error: selectError } = await supabase
+                    .from('users').select('*').eq('mobile_number', mobile).single();
+
+                if (selectError && selectError.code !== 'PGRST116') throw selectError;
+
+                if (existingUser) { // --- LOGIN FLOW ---
+                    if (existingUser.passcode.toString() !== passcode) {
+                        showToast("رمز عبور اشتباه است.", "error"); 
+                        return;
+                    }
+                    user = existingUser;
+                } else { // --- SIGN UP FLOW ---
+                    if (!brandName || !cityName) {
+                        showToast("برای ثبت‌نام، نام برند و شهر الزامی است.", "error"); 
+                        return;
+                    }
+                    const cityObj = appData.cities.find(c => c.name === cityName);
+                    if (!cityObj) {
+                        showToast('لطفاً یک شهر معتبر از لیست انتخاب کنید.', 'error'); 
+                        return;
+                    }
+                    
+                    const { data: newUser, error: insertError } = await supabase
+                        .from('users').insert({
+                            mobile_number: mobile,
+                            brand_name: brandName,
+                            city_id: cityObj.id,
+                            passcode: parseInt(passcode, 10) // Passcode is now mandatory
+                        }).select().single();
+                    
+                    if (insertError) throw insertError;
+                    user = newUser;
+                }
+                
+                // --- Post-Login/Sign-up Logic ---
+                localStorage.setItem('protein-price-user', JSON.stringify(user));
+                await checkSubmissionStatus();
+                updateHomePageUI();
+                showPage('home-page');
+
+            } catch (error) {
+                console.error("Login/Signup Error:", error);
+                showError("خطایی رخ داد. لطفا دوباره تلاش کنید.");
+            } finally {
+                dom.loginButton.disabled = false;
+                dom.loginButton.textContent = 'ورود / ثبت‌نام';
+            }
+        }
+        
+        async function checkSubmissionStatus() {
+            if (!user) { hasSubmitted = false; return; }
+            const yearMonth = new Date().toISOString().slice(0, 7);
+            const { data, error } = await supabase.from('user_prices').select('id').eq('user_id', user.id).eq('year_month', yearMonth).limit(1);
+            if (error) console.error("Error checking submission:", error);
+            hasSubmitted = data && data.length > 0;
+        }
+
+        function calculateStandardPrice() {
+            const price = toEnglishNumerals(dom.submitPriceInput.value.replace(/,/g, ''));
+            const variantId = Number(dom.submitVariantSelect.value);
+            const variant = appData.variants.find(v => v.id === variantId);
+
+            if (price && variant) {
+                const calculatedPrice = Number(price) / variant.std_quantity_per_pack;
+                dom.standardPriceDisplay.textContent = `معادل ${formatNumber(Math.round(calculatedPrice))} تومان برای هر ${variant.std_unit}`;
+                dom.standardPriceDisplay.classList.remove('hidden');
+            } else {
+                dom.standardPriceDisplay.classList.add('hidden');
+            }
+        }
+        
+        async function handleSubmitPrice(e) {
+            e.preventDefault();
+            const price = toEnglishNumerals(dom.submitPriceInput.value.replace(/,/g, ''));
+            const variantId = Number(dom.submitVariantSelect.value);
+            if (!price || !variantId || !user) { showToast('لطفاً تمام فیلدها را تکمیل کنید.', 'error'); return; }
+
+            dom.submitPriceButton.disabled = true;
+            dom.submitPriceButton.textContent = 'در حال ثبت...';
+            
+            const yearMonth = new Date().toISOString().slice(0, 7);
+            const { error } = await supabase.from('user_prices').upsert({ user_id: user.id, variant_id: variantId, year_month: yearMonth, price_per_pack: Number(price), status: 'locked' }, { onConflict: 'user_id, variant_id, year_month' });
+            
+            if (error) {
+                console.error("Submit price error:", error);
+                showToast("خطا در ثبت قیمت. لطفاً دوباره تلاش کنید.", 'error');
+            } else {
+                hasSubmitted = true;
+                updateHomePageUI();
+                showPage('home-page');
+                showToast("قیمت شما با موفقیت ثبت شد!", 'success');
+            }
+            dom.submitPriceButton.disabled = false;
+            dom.submitPriceButton.textContent = `قفل قیمت ${getCurrentPersianMonth()}`;
+        }
+
+        async function fetchReport() {
+            const templateId = Number(dom.reportTemplateSelect.value);
+            const city = dom.reportCitySelect.value;
+            if (!templateId || !city) return;
+
+            dom.reportLoader.style.display = 'flex';
+            dom.reportDataView.classList.add('hidden');
+            dom.reportNoData.classList.add('hidden');
+            
+            const yearMonth = new Date().toISOString().slice(0, 7);
+            const { data, error } = await supabase.from('aggregates').select('*').eq('template_id', templateId).eq('city', city).eq('year_month', yearMonth);
+            
+            dom.reportLoader.style.display = 'none';
+            if (error || !data || data.length === 0) {
+                console.log("Could not fetch report:", error?.message);
+                dom.reportNoData.classList.remove('hidden');
+            } else {
+                const report = data[0];
+                const template = appData.templates.find(t => t.id === templateId);
+                dom.reportTitle.textContent = `گزارش قیمت «${template.name}» در «${city}»`;
+                dom.reportSubtitle.textContent = `بر اساس ${formatNumber(report.n)} گزارش (${getCurrentPersianMonth()}) - قیمت به ازای هر ${report.unit}`;
+                dom.reportMin.textContent = formatNumber(report.min);
+                dom.reportMax.textContent = formatNumber(report.max);
+                dom.reportMedian.textContent = formatNumber(report.median);
+                renderChart(report);
+                dom.reportDataView.classList.remove('hidden');
+            }
+        }
+        
+        async function handleReportProductChange() {
+            const templateId = Number(dom.reportTemplateSelect.value);
+            dom.reportCitySelect.innerHTML = '';
+            dom.reportDataView.classList.add('hidden');
+            dom.reportNoData.classList.add('hidden');
+
+            if (!templateId) {
+                const option = document.createElement('option');
+                option.textContent = 'ابتدا محصول را انتخاب کنید'; option.disabled = true;
+                dom.reportCitySelect.appendChild(option); dom.reportCitySelect.disabled = true;
+                return;
+            }
+
+            dom.reportCitySelect.disabled = true;
+            try {
+                const yearMonth = new Date().toISOString().slice(0, 7);
+                const { data: availableReports, error } = await supabase.from('aggregates').select('city').eq('template_id', templateId).eq('year_month', yearMonth);
+                if (error) throw error;
+
+                if (availableReports && availableReports.length > 0) {
+                    const cityNames = [...new Set(availableReports.map(item => item.city))].sort();
+                    populateSelect(dom.reportCitySelect, cityNames.map(name => ({ name })), 'name', 'name');
+                    dom.reportCitySelect.disabled = false;
+                    const userCity = appData.cities.find(c => c.id === user.city_id);
+                    if (userCity && cityNames.includes(userCity.name)) {
+                        dom.reportCitySelect.value = userCity.name;
+                    } else {
+                        dom.reportCitySelect.value = cityNames[0];
+                    }
+                    fetchReport();
+                } else {
+                    const option = document.createElement('option');
+                    option.textContent = 'داده‌ای یافت نشد'; option.disabled = true;
+                    dom.reportCitySelect.appendChild(option);
+                    dom.reportNoData.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error("Error fetching available cities:", error);
+                showToast("خطا در بارگذاری شهرها.", 'error');
+                dom.reportCitySelect.disabled = true;
+            }
+        }
+
+        async function prefillSubmissionForm() {
+            const yearMonth = new Date().toISOString().slice(0, 7);
+            const { data: priceData, error } = await supabase.from('user_prices').select('variant_id, price_per_pack').eq('user_id', user.id).eq('year_month', yearMonth).single();
+
+            if (error || !priceData) {
+                console.error("Could not fetch previous submission:", error);
+                updateSubmitPageUI(); return;
+            }
+
+            const variant = appData.variants.find(v => v.id === priceData.variant_id);
+            if (!variant) { console.error("Variant not found"); updateSubmitPageUI(); return; }
+            const template = appData.templates.find(t => t.id === variant.template_id);
+            if (!template) { console.error("Template not found"); updateSubmitPageUI(); return; }
+            const category = appData.categories.find(c => c.id === template.category_id);
+            if (!category) { console.error("Category not found"); updateSubmitPageUI(); return; }
+
+            dom.submitCategorySelect.value = category.id;
+            const templatesForCategory = appData.templates.filter(t => t.category_id === category.id);
+            populateSelect(dom.submitTemplateSelect, templatesForCategory);
+            dom.submitTemplateSelect.value = template.id;
+            const variantsForTemplate = appData.variants.filter(v => v.template_id === template.id);
+            populateSelect(dom.submitVariantSelect, variantsForTemplate, 'id', 'name');
+            dom.submitVariantSelect.value = variant.id;
+            dom.submitPriceInput.value = formatNumber(priceData.price_per_pack);
+            calculateStandardPrice();
+        }
+
+        // --- App Initialization ---
+        async function init() {
+            try {
+                const [catRes, tempRes, varRes, cityRes] = await Promise.all([
+                    supabase.from('categories').select('*'),
+                    supabase.from('product_templates').select('*'),
+                    supabase.from('product_variants').select('*'),
+                    supabase.from('cities').select('id, name').order('name', { ascending: true })
+                ]);
+                if (catRes.error) throw catRes.error; if (tempRes.error) throw tempRes.error; if (varRes.error) throw varRes.error; if (cityRes.error) throw cityRes.error;
+                
+                appData.categories = catRes.data; appData.templates = tempRes.data; appData.variants = varRes.data; appData.cities = cityRes.data;
+
+                populateDatalist(dom.cityList, appData.cities);
+                setupEventListeners();
+
+                const savedUser = localStorage.getItem('protein-price-user');
+                if (savedUser) {
+                    user = JSON.parse(savedUser);
+                    await checkSubmissionStatus();
+                    updateHomePageUI();
+                    showPage('home-page');
+                } else {
+                    showPage('login-page');
+                }
+            } catch (error) {
+                console.error("Initialization Error:", error);
+                let msg = "خطا در بارگذاری اطلاعات اولیه. لطفاً صفحه را رفرش کنید.";
+                if (error.message && error.message.includes("Invalid API key")) {
+                    msg = "کلید API مربوط به Supabase نامعتبر است. لطفاً آن را در کد بررسی کنید.";
+                }
+                showError(msg);
+            }
+        }
+        
+        function setupEventListeners() {
+            dom.loginForm.addEventListener('submit', handleLogin);
+            dom.mobileInput.addEventListener('blur', checkUserOnMobileInput); // <-- NEW EVENT LISTENER
+            
+            dom.logoutButton.addEventListener('click', () => {
+                localStorage.removeItem('protein-price-user');
+                user = null;
+                hasSubmitted = false;
+                dom.mobileInput.value = '';
+                dom.brandNameInput.value = '';
+                dom.cityInput.value = '';
+                dom.passcodeInput.value = '';
+                // NEW: Reset disabled state on logout
+                dom.brandNameInput.disabled = false;
+                dom.cityInput.disabled = false;
+                showPage('login-page');
+            });
+            
+            dom.goToSubmitButton.addEventListener('click', async () => {
+                dom.submitPageTitle.textContent = `ثبت قیمت ${getCurrentPersianMonth()}`;
+                populateSelect(dom.submitCategorySelect, appData.categories);
+                if (hasSubmitted) { await prefillSubmissionForm(); } else { updateSubmitPageUI(); }
+                showPage('submit-price-page');
+            });
+            
+            dom.goToReportButton.addEventListener('click', () => {
+                if (hasSubmitted) {
+                    dom.reportContent.classList.remove('hidden'); dom.reportAccessDenied.classList.add('hidden');
+                    populateSelect(dom.reportTemplateSelect, appData.templates, 'id', 'name', 'محصول را انتخاب کنید...');
+                    const option = document.createElement('option');
+                    option.textContent = 'ابتدا محصول را انتخاب کنید'; option.disabled = true;
+                    dom.reportCitySelect.appendChild(option); dom.reportCitySelect.disabled = true;
+                    dom.reportDataView.classList.add('hidden'); dom.reportNoData.classList.add('hidden'); dom.reportLoader.style.display = 'none';
+                } else {
+                    dom.reportContent.classList.add('hidden'); dom.reportAccessDenied.classList.remove('hidden');
+                }
+                showPage('market-report-page');
+            });
+
+            dom.submitPriceInput.addEventListener('input', (e) => {
+                const value = toEnglishNumerals(e.target.value.replace(/,/g, ''));
+                if (isNaN(value)) { e.target.value = ''; return; }
+                const formatted = formatNumber(value);
+                e.target.value = formatted;
+                calculateStandardPrice();
+            });
+
+            dom.submitBackButton.addEventListener('click', () => showPage('home-page'));
+            dom.submitCategorySelect.addEventListener('change', updateSubmitPageUI);
+            dom.submitTemplateSelect.addEventListener('change', updateSubmitVariantsUI);
+            dom.submitVariantSelect.addEventListener('change', calculateStandardPrice);
+            dom.submitPriceForm.addEventListener('submit', handleSubmitPrice);
+            dom.reportBackButton.addEventListener('click', () => showPage('home-page'));
+            dom.reportGoToSubmitButton.addEventListener('click', () => {
+                dom.submitPageTitle.textContent = `ثبت قیمت ${getCurrentPersianMonth()}`;
+                populateSelect(dom.submitCategorySelect, appData.categories);
+                updateSubmitPageUI();
+                showPage('submit-price-page');
+            });
+            
+            dom.reportTemplateSelect.addEventListener('change', handleReportProductChange);
+            dom.reportCitySelect.addEventListener('change', fetchReport);
+        }
+        
+        document.addEventListener('DOMContentLoaded', init);
+
+    </script>
+</body>
+</html>
+
