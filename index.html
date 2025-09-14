@@ -190,7 +190,8 @@
 
         // --- State Variables ---
         let user = null;
-        let submissionCountThisMonth = 0; // MODIFIED
+        let submissionCountThisMonth = 0;
+        let submittedVariantIdsThisMonth = [];
         let appData = { categories: [], templates: [], variants: [], cities: [] };
         
         // --- DOM Elements ---
@@ -227,7 +228,7 @@
             marketReportPage: document.getElementById('market-report-page'),
             reportBackButton: document.getElementById('report-back-button'),
             reportAccessDenied: document.getElementById('report-access-denied'),
-            reportAccessDeniedMessage: document.getElementById('report-access-denied-message'), // NEW
+            reportAccessDeniedMessage: document.getElementById('report-access-denied-message'),
             reportGoToSubmitButton: document.getElementById('report-go-to-submit-button'),
             reportContent: document.getElementById('report-content'),
             reportTemplateSelect: document.getElementById('report-template-select'),
@@ -278,7 +279,7 @@
             dom.toast.textContent = message;
             dom.toast.className = type; 
             dom.toast.classList.add('show');
-            setTimeout(() => { dom.toast.classList.remove('show'); }, 3000);
+            setTimeout(() => { dom.toast.classList.remove('show'); }, 4000);
         };
         
         // --- UI Update Functions ---
@@ -311,6 +312,22 @@
             });
         }
         
+        function populateTemplatesSelect(selectElement, templates) {
+            selectElement.innerHTML = '';
+            const submittedTemplateIds = submittedVariantIdsThisMonth
+                .map(variantId => appData.variants.find(v => v.id === variantId)?.template_id)
+                .filter(Boolean);
+
+            templates.forEach(template => {
+                const option = document.createElement('option');
+                option.value = template.id;
+                const isSubmitted = submittedTemplateIds.includes(template.id);
+                option.textContent = isSubmitted ? `${template.name} (قیمت ثبت شده)` : template.name;
+                option.disabled = isSubmitted;
+                selectElement.appendChild(option);
+            });
+        }
+
         function populateDatalist(datalistElement, items, valueField = 'name') {
             datalistElement.innerHTML = '';
             items.forEach(item => {
@@ -330,13 +347,13 @@
         function updateSubmitPageUI() {
             const selectedCategoryId = Number(dom.submitCategorySelect.value);
             const templates = appData.templates.filter(t => t.category_id === selectedCategoryId);
-            populateSelect(dom.submitTemplateSelect, templates);
+            populateTemplatesSelect(dom.submitTemplateSelect, templates);
             updateSubmitVariantsUI();
         }
 
         function renderChart(data) {
             dom.chartContainer.innerHTML = '';
-            const values = [data.min, data.p25, data.median, data.p75, data.max];
+            const values = [data.min, data.p25, data.median, data.p75, data.max].map(v => Math.round(v)); // MODIFIED
             const labels = ['کمینه', 'چارک اول', 'میانه', 'چارک سوم', 'بیشینه'];
             const maxValue = Math.max(...values);
             
@@ -344,7 +361,7 @@
                 const barWrapper = document.createElement('div');
                 barWrapper.className = 'chart-bar-wrapper flex flex-col items-center h-full justify-end w-1/5';
                 const tooltip = document.createElement('div');
-                tooltip.className = 'chart-tooltip'; tooltip.textContent = formatNumber(value);
+                tooltip.className = 'chart-tooltip'; tooltip.textContent = formatNumber(value); // Already rounded
                 const bar = document.createElement('div');
                 const barHeight = (value / maxValue) * 100;
                 bar.className = 'chart-bar w-1/2 rounded-t-md cursor-pointer';
@@ -438,21 +455,26 @@
             }
         }
         
-        // MODIFIED to get count
         async function checkSubmissionStatus() {
-            if (!user) { submissionCountThisMonth = 0; return; }
+            if (!user) { 
+                submissionCountThisMonth = 0; 
+                submittedVariantIdsThisMonth = [];
+                return; 
+            }
             const yearMonth = new Date().toISOString().slice(0, 7);
-            const { count, error } = await supabase
+            const { data, error } = await supabase
                 .from('user_prices')
-                .select('*', { count: 'exact', head: true })
+                .select('variant_id')
                 .eq('user_id', user.id)
                 .eq('year_month', yearMonth);
 
             if (error) {
-                console.error("Error checking submission count:", error);
+                console.error("Error checking submissions:", error);
                 submissionCountThisMonth = 0;
+                submittedVariantIdsThisMonth = [];
             } else {
-                submissionCountThisMonth = count || 0;
+                submittedVariantIdsThisMonth = data.map(item => item.variant_id);
+                submissionCountThisMonth = submittedVariantIdsThisMonth.length;
             }
         }
 
@@ -473,16 +495,33 @@
             e.preventDefault();
             const price = toEnglishNumerals(dom.submitPriceInput.value.replace(/,/g, ''));
             const variantId = Number(dom.submitVariantSelect.value);
-            if (!price || !variantId || !user) { showToast('لطفاً تمام فیلدها را تکمیل کنید.', 'error'); return; }
+            if (!price || !variantId || !user) { 
+                showToast('لطفاً تمام فیلدها را تکمیل کنید.', 'error'); 
+                return; 
+            }
+            
+            const numericPrice = Number(price);
+            if (numericPrice < 1000) {
+                const suggestedPrice = formatNumber(numericPrice * 1000);
+                const currentPrice = formatNumber(numericPrice);
+                showToast(`قیمت ${currentPrice} تومان بسیار پایین است. آیا منظور شما ${suggestedPrice} تومان بود؟`, 'error');
+                return;
+            }
+
             dom.submitPriceButton.disabled = true;
             dom.submitPriceButton.textContent = 'در حال ثبت...';
             const yearMonth = new Date().toISOString().slice(0, 7);
-            const { error } = await supabase.from('user_prices').upsert({ user_id: user.id, variant_id: variantId, year_month: yearMonth, price_per_pack: Number(price), status: 'locked' }, { onConflict: 'user_id, variant_id, year_month' });
+            const { error } = await supabase.from('user_prices').insert({ user_id: user.id, variant_id: variantId, year_month: yearMonth, price_per_pack: numericPrice, status: 'locked' });
+            
             if (error) {
                 console.error("Submit price error:", error);
-                showToast("خطا در ثبت قیمت. لطفاً دوباره تلاش کنید.", 'error');
+                 if (error.code === '23505') {
+                    showToast("شما قبلاً برای این محصول قیمت ثبت کرده‌اید.", 'error');
+                } else {
+                    showToast("خطا در ثبت قیمت. لطفاً دوباره تلاش کنید.", 'error');
+                }
             } else {
-                await checkSubmissionStatus(); // MODIFIED
+                await checkSubmissionStatus();
                 updateHomePageUI();
                 showPage('home-page');
                 showToast("قیمت شما با موفقیت ثبت شد!", 'success');
@@ -509,9 +548,9 @@
                 const template = appData.templates.find(t => t.id === templateId);
                 dom.reportTitle.textContent = `گزارش قیمت «${template.name}» در «${city}»`;
                 dom.reportSubtitle.textContent = `بر اساس ${formatNumber(report.n)} گزارش (${getCurrentPersianMonth()}) - قیمت به ازای هر ${report.unit}`;
-                dom.reportMin.textContent = formatNumber(report.min);
-                dom.reportMax.textContent = formatNumber(report.max);
-                dom.reportMedian.textContent = formatNumber(report.median);
+                dom.reportMin.textContent = formatNumber(Math.round(report.min)); // MODIFIED
+                dom.reportMax.textContent = formatNumber(Math.round(report.max)); // MODIFIED
+                dom.reportMedian.textContent = formatNumber(Math.round(report.median)); // MODIFIED
                 renderChart(report);
                 dom.reportDataView.classList.remove('hidden');
             }
@@ -644,7 +683,8 @@
             dom.logoutButton.addEventListener('click', () => {
                 localStorage.removeItem('protein-price-user');
                 user = null;
-                submissionCountThisMonth = 0; // MODIFIED
+                submissionCountThisMonth = 0;
+                submittedVariantIdsThisMonth = [];
                 dom.mobileInput.value = '';
                 dom.brandNameInput.value = '';
                 dom.cityInput.value = '';
@@ -661,13 +701,11 @@
                 showPage('submit-price-page');
             });
             
-            // MODIFIED to check submission count
             dom.goToReportButton.addEventListener('click', () => {
                 const requiredSubmissions = 5;
                 if (submissionCountThisMonth >= requiredSubmissions) {
                     dom.reportContent.classList.remove('hidden'); dom.reportAccessDenied.classList.add('hidden');
                     populateSelect(dom.reportTemplateSelect, appData.templates, 'id', 'name', 'محصول را انتخاب کنید...');
-                    
                     if (appData.templates.length > 0) {
                         dom.reportTemplateSelect.value = appData.templates[0].id;
                         handleReportProductChange();
