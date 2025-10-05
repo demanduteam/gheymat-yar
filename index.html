@@ -95,6 +95,7 @@
                 <button id="go-to-add-new-price-button" class="w-full py-3 px-4 rounded-lg font-bold text-lg transition-transform transform active:scale-95 bg-teal-600 hover:bg-teal-700 text-white">ثبت قیمت جدید</button>
                 <button id="go-to-report-button" class="w-full py-3 px-4 rounded-lg font-bold text-lg transition-transform transform active:scale-95 bg-gray-200 hover:bg-gray-300 text-gray-800">مشاهده گزارش بازار</button>
                 <button id="go-to-history-button" class="w-full py-3 px-4 rounded-lg font-bold text-lg transition-transform transform active:scale-95 bg-gray-200 hover:bg-gray-300 text-gray-800">مشاهده سوابق ثبت</button>
+                <button id="go-to-calculator-button" class="w-full py-3 px-4 rounded-lg font-bold text-lg transition-transform transform active:scale-95 bg-blue-600 hover:bg-blue-700 text-white mt-4">ابزار قیمت گذاری</button>
             </div>
             <div class="p-6"> <button id="logout-button" class="w-full py-3 px-4 rounded-lg font-bold text-lg transition-transform transform active:scale-95 bg-red-500 hover:bg-red-600 text-white">خروج از حساب کاربری</button> </div>
         </div>
@@ -102,7 +103,7 @@
         <!-- Submit Price Page -->
         <div id="submit-price-page" class="page">
             <div class="bg-white shadow-sm p-4 sticky top-0 z-10 flex items-center">
-                <button id="submit-back-button" class="text-teal-600 ml-4"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> </button>
+                <button id="submit-back-button" class="text-teal-600 ml-4"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> </button>
                 <h1 id="submit-page-title" class="text-xl font-bold text-gray-800 flex-grow"></h1>
             </div>
             <form id="submit-price-form" class="p-6 space-y-4">
@@ -133,8 +134,8 @@
             </div>
             <div id="report-content" class="p-6 space-y-4 hidden">
                  <div class="grid grid-cols-2 gap-4">
-                    <div> <label class="font-semibold text-gray-700 mb-2 block">محصول</label> <select id="report-template-select" class="w-full p-3 border border-gray-300 rounded-lg bg-white"></select> </div>
-                    <div> <label class="font-semibold text-gray-700 mb-2 block">شهر</label> <select id="report-city-select" class="w-full p-3 border border-gray-300 rounded-lg bg-white"></select> </div>
+                     <div> <label class="font-semibold text-gray-700 mb-2 block">محصول</label> <select id="report-template-select" class="w-full p-3 border border-gray-300 rounded-lg bg-white"></select> </div>
+                     <div> <label class="font-semibold text-gray-700 mb-2 block">شهر</label> <select id="report-city-select" class="w-full p-3 border border-gray-300 rounded-lg bg-white"></select> </div>
                 </div>
                 <div class="bg-white rounded-xl shadow-md p-6">
                     <div id="report-loader" class="flex justify-center items-center p-8"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div></div>
@@ -142,12 +143,12 @@
                         <h3 id="report-title" class="text-xl font-bold text-center mb-1 text-gray-800"></h3>
                         <p id="report-subtitle" class="text-center text-sm text-gray-500 mb-6"></p>
                         <div class="grid grid-cols-2 gap-4 text-center mb-6">
-                           <div class="bg-gray-100 p-3 rounded-lg"><div class="text-sm text-gray-600">کمینه</div><div id="report-min" class="font-bold text-lg"></div></div>
-                           <div class="bg-gray-100 p-3 rounded-lg"><div class="text-sm text-gray-600">بیشینه</div><div id="report-max" class="font-bold text-lg"></div></div>
+                            <div class="bg-gray-100 p-3 rounded-lg"><div class="text-sm text-gray-600">کمینه</div><div id="report-min" class="font-bold text-lg"></div></div>
+                            <div class="bg-gray-100 p-3 rounded-lg"><div class="text-sm text-gray-600">بیشینه</div><div id="report-max" class="font-bold text-lg"></div></div>
                         </div>
                         <div class="bg-teal-50 p-4 rounded-lg text-center mb-6">
-                            <div class="text-md text-teal-800">قیمت میانه (شاخص اصلی)</div>
-                            <div class="font-extrabold text-3xl text-teal-700 my-1"><span id="report-median"></span> <span class="text-lg">تومان</span></div>
+                             <div class="text-md text-teal-800">قیمت میانه (شاخص اصلی)</div>
+                             <div class="font-extrabold text-3xl text-teal-700 my-1"><span id="report-median"></span> <span class="text-lg">تومان</span></div>
                         </div>
                         <div class="mt-4 h-64 w-full"> <div id="chart-container" class="w-full h-full flex justify-around items-end border-l border-b border-gray-200 pl-2"></div> </div>
                     </div>
@@ -159,7 +160,7 @@
             </div>
         </div>
         
-        <!-- NEW: History Page -->
+        <!-- History Page -->
         <div id="history-page" class="page">
              <div class="bg-white shadow-sm p-4 sticky top-0 z-10 flex items-center">
                 <button id="history-back-button" class="text-teal-600 ml-4"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> </button>
@@ -171,6 +172,153 @@
                 <div id="history-no-data" class="text-center p-8 hidden">
                     <h3 class="font-bold text-lg text-gray-600">سابقه‌ای یافت نشد</h3>
                     <p class="text-gray-500 mt-2">شما هنوز هیچ قیمتی را ثبت نکرده‌اید.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cost Calculator Page -->
+        <div id="calculator-page" class="page">
+            <div class="bg-white shadow-sm p-4 sticky top-0 z-10 flex items-center">
+                <button id="calculator-back-button" class="text-teal-600 ml-4"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> </button>
+                <h1 class="text-xl font-bold text-gray-800 flex-grow">ابزار قیمت گذاری</h1>
+            </div>
+            <div class="p-6 space-y-6">
+                <div class="grid grid-cols-2 gap-2">
+                     <button id="manage-recipes-button" class="w-full py-3 px-3 rounded-lg font-semibold bg-gray-100 text-gray-800 transition">مدیریت رسپی‌ها</button>
+                     <button id="manage-op-costs-button" class="w-full py-3 px-3 rounded-lg font-semibold bg-gray-100 text-gray-800 transition">مدیریت هزینه‌ها</button>
+                </div>
+                <hr/>
+                <!-- Step 1: Select Recipe -->
+                <div id="calculator-step-1" class="space-y-2">
+                    <label for="recipe-select" class="font-semibold text-gray-700 block">۱. انتخاب رسپی برای محاسبه</label>
+                    <select id="recipe-select" class="w-full p-3 border border-gray-300 rounded-lg bg-white"></select>
+                </div>
+
+                <!-- Step 2: Input Parameters & Confirm Prices -->
+                <div id="calculator-step-2-combined" class="hidden space-y-4 bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-bold text-gray-800">۲. ورودی‌ها و قیمت‌ها</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label for="batch-size" class="font-semibold text-gray-700 block text-sm">وزن خروجی بچ (کیلوگرم):</label>
+                            <input type="number" id="batch-size" placeholder="مثلاً: 150" class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div class="space-y-2">
+                            <label for="profit-margin" class="font-semibold text-gray-700 block text-sm">حاشیه سود مورد نظر (%):</label>
+                            <input type="number" id="profit-margin" placeholder="مثلاً: 30" value="30" class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                    </div>
+                    
+                    <p class="text-sm text-gray-600 pt-4">قیمت‌های زیر آخرین قیمت‌های ثبت‌شده شما (به ازای هر کیلوگرم) هستند. در صورت نیاز می‌توانید آن‌ها را ویرایش کنید.</p>
+                    <div id="price-confirmation-materials" class="space-y-3"></div>
+                    <div id="price-confirmation-ops" class="space-y-3 mt-4"></div>
+                    
+                    <button id="confirm-and-calculate-button" class="w-full !mt-6 py-3 px-4 rounded-lg font-bold text-lg bg-green-600 text-white transition-transform transform active:scale-95">محاسبه هزینه</button>
+
+                </div>
+
+                <!-- Step 3: View Results -->
+                <div id="calculator-step-3" class="hidden space-y-4">
+                     <h3 class="font-bold text-gray-800">۳. نتایج محاسبه</h3>
+                     <div id="calculator-loader" class="flex justify-center items-center p-8 hidden"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div></div>
+                     <div id="calculator-results-content" class="hidden">
+                         <!-- Summary Cards -->
+                        <div id="result-summary" class="space-y-4 text-center"></div>
+                        <!-- Details Table -->
+                        <div id="result-details" class="mt-6"></div>
+                     </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recipe Management Page -->
+        <div id="recipe-management-page" class="page">
+            <div class="bg-white shadow-sm p-4 sticky top-0 z-10 flex items-center">
+                <button id="recipe-management-back-button" class="text-teal-600 ml-4"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> </button>
+                <h1 class="text-xl font-bold text-gray-800 flex-grow">مدیریت رسپی‌ها</h1>
+            </div>
+            <div class="p-6 space-y-4 flex-grow flex flex-col">
+                <div id="recipe-list-container" class="space-y-3 flex-grow">
+                    <!-- Recipe list will be dynamically added here -->
+                </div>
+                <div class="mt-auto pt-6">
+                    <button id="add-new-recipe-button" class="w-full py-3 px-4 rounded-lg font-bold text-lg bg-teal-600 text-white transition-transform transform active:scale-95">افزودن رسپی جدید</button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Recipe Editor Page -->
+        <div id="recipe-editor-page" class="page">
+            <div class="bg-white shadow-sm p-4 sticky top-0 z-10 flex items-center">
+                <button id="recipe-editor-back-button" class="text-teal-600 ml-4"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> </button>
+                <h1 id="recipe-editor-title" class="text-xl font-bold text-gray-800 flex-grow">افزودن / ویرایش رسپی</h1>
+            </div>
+            <form id="recipe-editor-form" class="p-6 space-y-6 flex-grow flex flex-col">
+                <div class="space-y-4">
+                    <div>
+                        <label for="recipe-name" class="font-semibold text-gray-700 block mb-1">نام رسپی</label>
+                        <input type="text" id="recipe-name" required class="w-full p-3 border border-gray-300 rounded-lg" placeholder="مثلاً: هات داگ ویژه">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="recipe-yield" class="font-semibold text-gray-700 block mb-1">بازدهی پخت (%)</label>
+                            <input type="number" id="recipe-yield" required class="w-full p-3 border border-gray-300 rounded-lg" placeholder="مثلاً: 85">
+                        </div>
+                        <div>
+                            <label for="recipe-batch-size" class="font-semibold text-gray-700 block mb-1">وزن بچ (کیلوگرم)</label>
+                            <input type="number" id="recipe-batch-size" step="0.01" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="مثلاً: 100.50">
+                        </div>
+                    </div>
+                    <div >
+                        <label for="recipe-production-time" class="font-semibold text-gray-700 block mb-1">زمان تولید بچ (ساعت)</label>
+                        <input type="number" id="recipe-production-time" step="0.1" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="مثلاً: 4.5">
+                    </div>
+                    
+                    <hr class="my-6">
+
+                    <div>
+                        <h3 class="font-bold text-lg text-gray-800 mb-2">مواد اولیه</h3>
+                        <div id="recipe-items-container" class="space-y-3">
+                            <!-- Recipe items will be dynamically added here -->
+                        </div>
+                        <button type="button" id="add-recipe-item-button" class="w-full mt-4 py-2 px-3 rounded-lg text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 transition">افزودن ماده اولیه</button>
+                    </div>
+                </div>
+
+                <div class="mt-auto pt-6">
+                     <button id="save-recipe-button" type="submit" class="w-full py-3 px-4 rounded-lg font-bold text-lg bg-teal-600 text-white transition-transform transform active:scale-95">ذخیره رسپی</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- NEW: Operational Costs Page -->
+        <div id="op-costs-page" class="page">
+            <div class="bg-white shadow-sm p-4 sticky top-0 z-10 flex items-center">
+                <button id="op-costs-back-button" class="text-teal-600 ml-4"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> </button>
+                <h1 class="text-xl font-bold text-gray-800 flex-grow">مدیریت هزینه‌های عملیاتی</h1>
+            </div>
+            <form id="op-costs-form" class="p-6 space-y-4 flex-grow flex flex-col">
+                <div id="op-costs-container" class="space-y-4">
+                    <!-- Operational cost inputs will be dynamically added here -->
+                </div>
+                <div class="mt-auto pt-6">
+                    <button id="save-op-costs-button" type="submit" class="w-full py-3 px-4 rounded-lg font-bold text-lg bg-teal-600 text-white transition-transform transform active:scale-95">ذخیره هزینه‌ها</button>
+                </div>
+            </form>
+        </div>
+
+
+        <!-- Membership Denied Page -->
+        <div id="membership-denied-page" class="page">
+            <div class="bg-white shadow-sm p-4 sticky top-0 z-10 flex items-center">
+                <button id="membership-denied-back-button" class="text-teal-600 ml-4"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> </button>
+                <h1 class="text-xl font-bold text-gray-800 flex-grow">دسترسی ویژه</h1>
+            </div>
+            <div class="flex-grow flex flex-col items-center justify-center p-8 text-center">
+                <div class="bg-blue-100 border-r-4 border-blue-500 text-blue-700 p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-bold mb-2">قابلیت ویژه اعضا</h2>
+                    <p class="mb-6">ابزار قیمت گذاری یک ابزار قدرمند و ویژه برای اعضای حرفه‌ای قیمت‌یار است. برای دسترسی به این قابلیت، لطفاً اشتراک خود را فعال کنید.</p>
+                    <button id="membership-contact-button" class="w-full py-3 px-4 rounded-lg font-bold text-lg bg-blue-600 hover:bg-blue-700 text-white">اطلاعات بیشتر و فعال‌سازی</button>
                 </div>
             </div>
         </div>
@@ -192,7 +340,8 @@
         let user = null;
         let submissionCountThisMonth = 0;
         let submittedVariantIdsThisMonth = [];
-        let appData = { categories: [], templates: [], variants: [], cities: [] };
+        let appData = { categories: [], templates: [], variants: [], cities: [], calculatorData: {} };
+        let currentEditingRecipeId = null;
         
         // --- DOM Elements ---
         const pages = document.querySelectorAll('.page');
@@ -248,10 +397,56 @@
             historyList: document.getElementById('history-list'), 
             historyNoData: document.getElementById('history-no-data'), 
             toast: document.getElementById('toast'),
+            // Calculator elements
+            calculatorPage: document.getElementById('calculator-page'),
+            goToCalculatorButton: document.getElementById('go-to-calculator-button'),
+            calculatorBackButton: document.getElementById('calculator-back-button'),
+            manageRecipesButton: document.getElementById('manage-recipes-button'),
+            manageOpCostsButton: document.getElementById('manage-op-costs-button'),
+            calculatorStep1: document.getElementById('calculator-step-1'),
+            calculatorStep2Combined: document.getElementById('calculator-step-2-combined'),
+            calculatorStep3: document.getElementById('calculator-step-3'),
+            recipeSelect: document.getElementById('recipe-select'),
+            batchSizeInput: document.getElementById('batch-size'),
+            profitMargin: document.getElementById('profit-margin'),
+            priceConfirmationMaterials: document.getElementById('price-confirmation-materials'),
+            priceConfirmationOps: document.getElementById('price-confirmation-ops'),
+            confirmAndCalculateButton: document.getElementById('confirm-and-calculate-button'),
+            calculatorLoader: document.getElementById('calculator-loader'),
+            calculatorResultsContent: document.getElementById('calculator-results-content'),
+            resultSummary: document.getElementById('result-summary'),
+            resultDetails: document.getElementById('result-details'),
+            // Recipe Management
+            recipeManagementPage: document.getElementById('recipe-management-page'),
+            recipeManagementBackButton: document.getElementById('recipe-management-back-button'),
+            recipeListContainer: document.getElementById('recipe-list-container'),
+            addNewRecipeButton: document.getElementById('add-new-recipe-button'),
+            // Recipe Editor elements
+            recipeEditorPage: document.getElementById('recipe-editor-page'),
+            recipeEditorBackButton: document.getElementById('recipe-editor-back-button'),
+            recipeEditorTitle: document.getElementById('recipe-editor-title'),
+            recipeEditorForm: document.getElementById('recipe-editor-form'),
+            recipeName: document.getElementById('recipe-name'),
+            recipeYield: document.getElementById('recipe-yield'),
+            recipeBatchSize: document.getElementById('recipe-batch-size'),
+            recipeProductionTime: document.getElementById('recipe-production-time'),
+            recipeItemsContainer: document.getElementById('recipe-items-container'),
+            addRecipeItemButton: document.getElementById('add-recipe-item-button'),
+            saveRecipeButton: document.getElementById('save-recipe-button'),
+            // Operational Costs
+            opCostsPage: document.getElementById('op-costs-page'),
+            opCostsBackButton: document.getElementById('op-costs-back-button'),
+            opCostsForm: document.getElementById('op-costs-form'),
+            opCostsContainer: document.getElementById('op-costs-container'),
+            saveOpCostsButton: document.getElementById('save-op-costs-button'),
+            // Membership elements
+            membershipDeniedPage: document.getElementById('membership-denied-page'),
+            membershipDeniedBackButton: document.getElementById('membership-denied-back-button'),
+            membershipContactButton: document.getElementById('membership-contact-button'),
         };
 
         // --- Helper Functions ---
-        const formatNumber = (num) => num ? num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : '۰';
+        const formatNumber = (num) => (num || num === 0) && num !== '' ? num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : '';
         const toEnglishNumerals = (str) => {
             if (!str) return '';
             return str.toString().replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
@@ -281,6 +476,51 @@
             dom.toast.classList.add('show');
             setTimeout(() => { dom.toast.classList.remove('show'); }, 4000);
         };
+
+        // --- Data Fetching Functions ---
+        async function fetchCalculatorData(userId) {
+            try {
+                const [
+                    recipesRes,
+                    rawMaterialsRes,
+                    recipeItemsRes,
+                    rawMaterialPricesRes,
+                    opCostTypesRes,
+                    opCostRatesRes
+                ] = await Promise.all([
+                    supabase.from('recipes').select('*').eq('user_id', userId),
+                    supabase.from('rawmaterials').select('*'),
+                    supabase.from('recipeitems').select('*'),
+                    supabase.from('rawmaterialprices').select('*').eq('user_id', userId),
+                    supabase.from('opcosttypes').select('*'),
+                    supabase.from('opcostrates').select('*').eq('user_id', userId)
+                ]);
+
+                if (recipesRes.error) throw recipesRes.error;
+                if (rawMaterialsRes.error) throw rawMaterialsRes.error;
+                if (recipeItemsRes.error) throw recipeItemsRes.error;
+                if (rawMaterialPricesRes.error) throw rawMaterialPricesRes.error;
+                if (opCostTypesRes.error) throw opCostTypesRes.error;
+                if (opCostRatesRes.error) throw opCostRatesRes.error;
+                
+                const userRecipeIds = recipesRes.data.map(r => r.id);
+                const filteredRecipeItems = recipeItemsRes.data.filter(item => userRecipeIds.includes(item.recipe_id));
+
+                return {
+                    recipes: recipesRes.data || [],
+                    rawMaterials: rawMaterialsRes.data || [],
+                    recipeItems: filteredRecipeItems || [],
+                    rawMaterialPrices: rawMaterialPricesRes.data || [],
+                    opCostTypes: opCostTypesRes.data || [],
+                    opCostRates: opCostRatesRes.data || [],
+                };
+
+            } catch (error) {
+                console.error("Error fetching calculator data:", error);
+                showToast("خطا در بارگذاری داده‌های ماشین حساب.", "error");
+                return { recipes: [], rawMaterials: [], recipeItems: [], rawMaterialPrices: [], opCostTypes: [], opCostRates: [] };
+            }
+        }
         
         // --- UI Update Functions ---
         function updateHomePageUI() {
@@ -353,7 +593,7 @@
 
         function renderChart(data) {
             dom.chartContainer.innerHTML = '';
-            const values = [data.min, data.p25, data.median, data.p75, data.max].map(v => Math.round(v)); // MODIFIED
+            const values = [data.min, data.p25, data.median, data.p75, data.max].map(v => Math.round(v));
             const labels = ['کمینه', 'چارک اول', 'میانه', 'چارک سوم', 'بیشینه'];
             const maxValue = Math.max(...values);
             
@@ -361,7 +601,7 @@
                 const barWrapper = document.createElement('div');
                 barWrapper.className = 'chart-bar-wrapper flex flex-col items-center h-full justify-end w-1/5';
                 const tooltip = document.createElement('div');
-                tooltip.className = 'chart-tooltip'; tooltip.textContent = formatNumber(value); // Already rounded
+                tooltip.className = 'chart-tooltip'; tooltip.textContent = formatNumber(value);
                 const bar = document.createElement('div');
                 const barHeight = (value / maxValue) * 100;
                 bar.className = 'chart-bar w-1/2 rounded-t-md cursor-pointer';
@@ -442,6 +682,20 @@
                     if (insertError) throw insertError;
                     user = newUser;
                 }
+
+                const { data: membership, error: membershipError } = await supabase
+                    .from('usermemberships')
+                    .select('id')
+                    .eq('user_id', user.id)
+                    .maybeSingle();
+
+                if (membershipError) {
+                    console.error("Error checking membership during login:", membershipError);
+                    user.has_valid_membership = false;
+                } else {
+                    user.has_valid_membership = !!membership;
+                }
+
                 localStorage.setItem('protein-price-user', JSON.stringify(user));
                 await checkSubmissionStatus();
                 updateHomePageUI();
@@ -548,9 +802,9 @@
                 const template = appData.templates.find(t => t.id === templateId);
                 dom.reportTitle.textContent = `گزارش قیمت «${template.name}» در «${city}»`;
                 dom.reportSubtitle.textContent = `بر اساس ${formatNumber(report.n)} گزارش (${getCurrentPersianMonth()}) - قیمت به ازای هر ${report.unit}`;
-                dom.reportMin.textContent = formatNumber(Math.round(report.min)); // MODIFIED
-                dom.reportMax.textContent = formatNumber(Math.round(report.max)); // MODIFIED
-                dom.reportMedian.textContent = formatNumber(Math.round(report.median)); // MODIFIED
+                dom.reportMin.textContent = formatNumber(Math.round(report.min));
+                dom.reportMax.textContent = formatNumber(Math.round(report.max));
+                dom.reportMedian.textContent = formatNumber(Math.round(report.median));
                 renderChart(report);
                 dom.reportDataView.classList.remove('hidden');
             }
@@ -645,6 +899,625 @@
             }
         }
 
+        // --- Calculator, Recipe & OpCost Functions ---
+        async function setupCalculatorPage() {
+            appData.calculatorData = await fetchCalculatorData(user.id);
+            const userRecipes = appData.calculatorData.recipes;
+            
+            populateSelect(dom.recipeSelect, userRecipes, 'id', 'name', 'یک رسپی را انتخاب کنید...');
+            dom.recipeSelect.value = '';
+
+            dom.calculatorStep2Combined.classList.add('hidden');
+            dom.calculatorStep3.classList.add('hidden');
+        }
+
+        async function handleRecipeSelection() {
+            const recipeId = Number(dom.recipeSelect.value);
+            dom.calculatorStep3.classList.add('hidden');
+
+            if (!recipeId) {
+                dom.calculatorStep2Combined.classList.add('hidden');
+                return;
+            }
+
+            const selectedRecipe = appData.calculatorData.recipes.find(r => r.id === recipeId);
+            if (selectedRecipe) {
+                dom.batchSizeInput.value = selectedRecipe.default_batch_kg;
+                await updatePriceInputs();
+                dom.calculatorStep2Combined.classList.remove('hidden');
+                dom.calculatorStep2Combined.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+        
+        function openRecipeManagementPage() {
+            dom.recipeListContainer.innerHTML = '';
+            const recipes = appData.calculatorData.recipes;
+            if (recipes && recipes.length > 0) {
+                recipes.forEach(recipe => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white p-4 rounded-lg border border-gray-200 flex justify-between items-center';
+                    card.innerHTML = `<p class="font-semibold text-gray-800">${recipe.name}</p>`;
+                    const editButton = document.createElement('button');
+                    editButton.className = 'py-1 px-3 rounded-md text-sm font-semibold bg-gray-200 text-gray-700';
+                    editButton.textContent = 'ویرایش';
+                    editButton.onclick = () => openRecipeEditor(recipe.id);
+                    card.appendChild(editButton);
+                    dom.recipeListContainer.appendChild(card);
+                });
+            } else {
+                dom.recipeListContainer.innerHTML = '<p class="text-center text-gray-500">هنوز رسپی‌ای اضافه نکرده‌اید.</p>';
+            }
+            showPage('recipe-management-page');
+        }
+
+        function openRecipeEditor(recipeId = null) {
+            currentEditingRecipeId = recipeId;
+            dom.recipeEditorForm.reset();
+            dom.recipeItemsContainer.innerHTML = '';
+            
+            if (recipeId) {
+                dom.recipeEditorTitle.textContent = 'ویرایش رسپی';
+                const recipe = appData.calculatorData.recipes.find(r => r.id === recipeId);
+                const recipeItems = appData.calculatorData.recipeItems.filter(item => item.recipe_id === recipeId);
+
+                if (recipe) {
+                    dom.recipeName.value = recipe.name;
+                    dom.recipeYield.value = recipe.yield_pct;
+                    dom.recipeBatchSize.value = recipe.default_batch_kg;
+                    dom.recipeProductionTime.value = recipe.production_time;
+                    recipeItems.forEach(item => addRecipeItemRow(item.raw_material_id, item.quantity));
+                }
+            } else {
+                dom.recipeEditorTitle.textContent = 'افزودن رسپی جدید';
+                addRecipeItemRow(); // Add one empty row to start with
+            }
+            showPage('recipe-editor-page');
+        }
+
+        function calculateAndUpdateBatchSize() {
+            const yieldPct = Number(dom.recipeYield.value) || 0;
+            let totalRawMaterialWeightKg = 0;
+            
+            const itemRows = dom.recipeItemsContainer.querySelectorAll('.grid');
+            itemRows.forEach(row => {
+                const materialId = row.querySelector('select').value;
+                const quantityInput = row.querySelector('input[type="number"]');
+                const quantity = Number(quantityInput.value) || 0;
+
+                if (materialId && quantity > 0) {
+                    const material = appData.calculatorData.rawMaterials.find(rm => rm.id == materialId);
+                    // Standardize material weight to KG
+                    if (material && material.unit && material.unit.toLowerCase() === 'gr') {
+                        totalRawMaterialWeightKg += quantity / 1000;
+                    } else if (material && material.unit && material.unit.toLowerCase() === 'kg') {
+                        totalRawMaterialWeightKg += quantity;
+                    } else {
+                         // Default to grams if unit is not specified or unknown (e.g. ml, pcs)
+                         totalRawMaterialWeightKg += quantity / 1000;
+                    }
+                }
+            });
+
+            if (totalRawMaterialWeightKg > 0 && yieldPct > 0) {
+                const calculatedBatchSize = totalRawMaterialWeightKg * (yieldPct / 100);
+                dom.recipeBatchSize.value = calculatedBatchSize.toFixed(2);
+            } else {
+                dom.recipeBatchSize.value = '';
+            }
+        }
+
+        function addRecipeItemRow(rawMaterialId = '', quantity = '') {
+            const itemRow = document.createElement('div');
+            itemRow.className = 'grid grid-cols-12 gap-2 items-center';
+            
+            const selectContainer = document.createElement('div');
+            selectContainer.className = 'col-span-6';
+            const select = document.createElement('select');
+            select.className = 'w-full p-2 border border-gray-300 rounded-md bg-white';
+            populateSelect(select, appData.calculatorData.rawMaterials, 'id', 'name', 'انتخاب ماده اولیه...');
+            if (rawMaterialId) select.value = rawMaterialId;
+
+            const quantityContainer = document.createElement('div');
+            quantityContainer.className = 'col-span-4';
+            const quantityInput = document.createElement('input');
+            quantityInput.type = 'number';
+            quantityInput.className = 'w-full p-2 border border-gray-300 rounded-md';
+            quantityInput.placeholder = 'مقدار';
+            if (quantity) quantityInput.value = quantity;
+            
+            const removeBtnContainer = document.createElement('div');
+            removeBtnContainer.className = 'col-span-2 text-center';
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500 mx-auto"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`;
+            removeBtn.onclick = () => {
+                itemRow.remove();
+                calculateAndUpdateBatchSize();
+            };
+
+            selectContainer.appendChild(select);
+            quantityContainer.appendChild(quantityInput);
+            removeBtnContainer.appendChild(removeBtn);
+            itemRow.appendChild(selectContainer);
+            itemRow.appendChild(quantityContainer);
+            itemRow.appendChild(removeBtnContainer);
+            
+            dom.recipeItemsContainer.appendChild(itemRow);
+        }
+
+        async function handleSaveRecipe(e) {
+            e.preventDefault();
+            const recipeName = dom.recipeName.value.trim();
+            const yieldPct = dom.recipeYield.value;
+            const batchSize = dom.recipeBatchSize.value;
+            const productionTime = dom.recipeProductionTime.value;
+
+            if (!recipeName || !yieldPct) {
+                showToast('نام رسپی و بازدهی پخت الزامی است.', 'error');
+                return;
+            }
+
+            dom.saveRecipeButton.disabled = true;
+            dom.saveRecipeButton.textContent = 'در حال ذخیره...';
+
+            try {
+                const recipePayload = {
+                    user_id: user.id,
+                    name: recipeName,
+                    yield_pct: Number(yieldPct),
+                    default_batch_kg: batchSize ? Number(batchSize) : null,
+                    production_time: productionTime ? Number(productionTime) : null,
+                };
+
+                if (currentEditingRecipeId) {
+                    recipePayload.id = currentEditingRecipeId;
+                }
+                
+                const { data: recipeData, error: recipeError } = await supabase
+                    .from('recipes')
+                    .upsert(recipePayload)
+                    .select()
+                    .single();
+
+                if (recipeError) throw recipeError;
+                
+                const newRecipeId = recipeData.id;
+
+                if (currentEditingRecipeId) {
+                    const { error: deleteError } = await supabase
+                        .from('recipeitems')
+                        .delete()
+                        .eq('recipe_id', newRecipeId);
+                    if (deleteError) throw deleteError;
+                }
+
+                const itemsToInsert = [];
+                const itemRows = dom.recipeItemsContainer.querySelectorAll('.grid');
+                itemRows.forEach(row => {
+                    const materialId = row.querySelector('select').value;
+                    const quantity = row.querySelector('input').value;
+                    if (materialId && quantity) {
+                        itemsToInsert.push({
+                            recipe_id: newRecipeId,
+                            raw_material_id: Number(materialId),
+                            quantity: Number(quantity),
+                        });
+                    }
+                });
+
+                if (itemsToInsert.length > 0) {
+                    const { error: itemsError } = await supabase
+                        .from('recipeitems')
+                        .insert(itemsToInsert);
+                    if (itemsError) throw itemsError;
+                }
+
+                showToast('رسپی با موفقیت ذخیره شد!', 'success');
+                await setupCalculatorPage(); 
+                openRecipeManagementPage();
+
+            } catch (error) {
+                console.error('Error saving recipe:', error);
+                showToast('خطا در ذخیره رسپی.', 'error');
+            } finally {
+                dom.saveRecipeButton.disabled = false;
+                dom.saveRecipeButton.textContent = 'ذخیره رسپی';
+            }
+        }
+        
+        function openOpCostsEditor() {
+            dom.opCostsContainer.innerHTML = '';
+            const opCostTypes = appData.calculatorData.opCostTypes;
+            const userRates = appData.calculatorData.opCostRates;
+
+            opCostTypes.forEach(type => {
+                // Find the latest rate for this type
+                const latestRate = userRates
+                    .filter(r => r.op_cost_type_id === type.id)
+                    .sort((a, b) => new Date(b.effective_at) - new Date(a.effective_at))[0];
+
+                const rateValue = latestRate ? latestRate.rate_value : '';
+
+                const wrapper = document.createElement('div');
+                const labelText = type.unit === '%_of_material_cost' ? `${type.name} (%)` : `${type.name} (تومان / ${type.unit === 'hour' ? 'ساعت' : 'واحد'})`;
+                const displayValue = type.unit === '%_of_material_cost' && rateValue ? rateValue * 100 : rateValue;
+
+                wrapper.innerHTML = `
+                    <label for="op-cost-${type.id}" class="font-semibold text-gray-700 block mb-1">${labelText}</label>
+                    <input type="text" inputmode="numeric" id="op-cost-${type.id}" data-type-id="${type.id}" data-unit="${type.unit}" class="w-full p-3 border border-gray-300 rounded-lg text-left" value="${formatNumber(displayValue)}">
+                `;
+                dom.opCostsContainer.appendChild(wrapper);
+            });
+            showPage('op-costs-page');
+        }
+
+        async function handleSaveOpCosts(e) {
+            e.preventDefault();
+            dom.saveOpCostsButton.disabled = true;
+            dom.saveOpCostsButton.textContent = 'در حال ذخیره...';
+            
+            const ratesToInsert = [];
+            const costInputs = dom.opCostsContainer.querySelectorAll('input');
+            const now = new Date().toISOString();
+
+            costInputs.forEach(input => {
+                const value = toEnglishNumerals(input.value.replace(/,/g, ''));
+                if (value !== '') { // Only save if a value is entered
+                    const typeId = Number(input.dataset.typeId);
+                    const unit = input.dataset.unit;
+                    let rateValue = Number(value);
+                    if (unit === '%_of_material_cost') {
+                        rateValue /= 100; // Convert percentage back to decimal
+                    }
+                    ratesToInsert.push({
+                        op_cost_type_id: typeId,
+                        user_id: user.id,
+                        rate_value: rateValue,
+                        effective_at: now
+                    });
+                }
+            });
+
+            try {
+                if (ratesToInsert.length > 0) {
+                     // Unlike recipes, we don't upsert. We insert new records to keep a history.
+                     // The getLatestPrices function will always pick the most recent one.
+                    const { error } = await supabase.from('opcostrates').insert(ratesToInsert);
+                    if (error) throw error;
+                }
+                showToast('هزینه‌های عملیاتی با موفقیت ذخیره شد.', 'success');
+                await setupCalculatorPage(); // Refresh data
+                showPage('calculator-page');
+            } catch (error) {
+                console.error('Error saving op costs:', error);
+                showToast('خطا در ذخیره هزینه‌ها.', 'error');
+            } finally {
+                dom.saveOpCostsButton.disabled = false;
+                dom.saveOpCostsButton.textContent = 'ذخیره هزینه‌ها';
+            }
+        }
+
+
+        async function updatePriceInputs() {
+            const recipeId = Number(dom.recipeSelect.value);
+            if (!recipeId) return;
+
+            try {
+                const effectivePrices = getLatestPrices(recipeId);
+                populateConfirmationUI(effectivePrices);
+            } catch(error) {
+                showToast(error.message, 'error');
+                console.error(error);
+                dom.priceConfirmationMaterials.innerHTML = `<p class="text-red-500 text-sm">${error.message}</p>`;
+                dom.priceConfirmationOps.innerHTML = '';
+            }
+        }
+
+        function getLatestPrices(recipeId) {
+            const data = appData.calculatorData;
+            const recipeItems = data.recipeItems.filter(i => i.recipe_id === recipeId);
+            
+            const latestPrices = { materials: [], ops: [] };
+
+            // 1. Material Prices
+            for (const item of recipeItems) {
+                const rawMaterial = data.rawMaterials.find(rm => rm.id === item.raw_material_id);
+                if (!rawMaterial) continue; 
+                const prices = data.rawMaterialPrices
+                    .filter(p => p.raw_material_id === item.raw_material_id)
+                    .sort((a, b) => new Date(b.effective_at) - new Date(a.effective_at));
+
+                const pricePerKg = prices.length > 0 ? prices[0].price_per_unit : null;
+
+                latestPrices.materials.push({
+                    id: rawMaterial.id,
+                    name: rawMaterial.name,
+                    unit: rawMaterial.unit,
+                    price_per_unit: pricePerKg 
+                });
+            }
+
+            // 2. Operational Costs Rates
+            const userOpCostRates = data.opCostRates;
+            for (const opCostType of data.opCostTypes) {
+                const latestRate = userOpCostRates
+                    .filter(r => r.op_cost_type_id === opCostType.id)
+                    .sort((a, b) => new Date(b.effective_at) - new Date(a.effective_at))[0];
+                
+                if (latestRate) {
+                    latestPrices.ops.push({
+                        id: opCostType.id,
+                        name: opCostType.name,
+                        unit: opCostType.unit,
+                        rate_value: latestRate.rate_value
+                    });
+                }
+            }
+            return latestPrices;
+        }
+
+        function populateConfirmationUI(prices) {
+            let materialHTML = '<h4 class="font-bold text-gray-700">مواد اولیه</h4>';
+            prices.materials.forEach(m => {
+                const priceValue = m.price_per_unit !== null ? m.price_per_unit : '';
+                const missingPriceClass = !priceValue && priceValue !== 0 ? 'border-red-500 ring-2 ring-red-200' : 'border-gray-300';
+                const placeholder = !priceValue && priceValue !== 0 ? 'قیمت را وارد کنید' : '';
+                
+                materialHTML += `
+                    <div class="grid grid-cols-2 gap-2 items-center">
+                        <label for="mat-price-${m.id}" class="text-sm text-gray-800">${m.name} (تومان / کیلوگرم)</label>
+                        <input type="text" inputmode="numeric" id="mat-price-${m.id}" data-id="${m.id}" data-type="material" class="w-full p-2 border rounded-md text-left ${missingPriceClass}" value="${formatNumber(priceValue)}" placeholder="${placeholder}">
+                    </div>
+                `;
+            });
+            dom.priceConfirmationMaterials.innerHTML = materialHTML;
+
+            let opsHTML = '<h4 class="font-bold text-gray-700 mt-4">هزینه‌های عملیاتی (فقط نمایش)</h4>';
+            if (prices.ops.length > 0) {
+                prices.ops.forEach(o => {
+                    const label = o.unit === '%_of_material_cost' ? `${o.name} (% از مواد)` : `${o.name} (تومان / ${o.unit === 'hour' ? 'ساعت' : 'واحد'})`;
+                    const value = o.unit === '%_of_material_cost' ? o.rate_value * 100 : o.rate_value;
+                    opsHTML += `
+                        <div class="grid grid-cols-2 gap-2 items-center">
+                            <label for="op-rate-${o.id}" class="text-sm text-gray-800">${label}</label>
+                            <input type="number" id="op-rate-${o.id}" class="w-full p-2 border border-gray-200 bg-gray-100 rounded-md text-left" value="${value}" disabled>
+                        </div>
+                    `;
+                });
+            } else {
+                opsHTML += `<p class="text-sm text-gray-500">هیچ هزینه عملیاتی ثبت نشده است. از بخش مدیریت هزینه‌ها اقدام کنید.</p>`;
+            }
+            dom.priceConfirmationOps.innerHTML = opsHTML;
+        }
+        
+        function calculateCost(recipeId, plannedOutputKg, priceOverrides, profitMargin) {
+            const data = appData.calculatorData;
+            const recipe = data.recipes.find(r => r.id === recipeId);
+            const recipeItems = data.recipeItems.filter(i => i.recipe_id === recipeId);
+            
+            let totalMaterialCost = 0;
+            const breakdown = [];
+
+            // 1. Material Costs
+            for (const item of recipeItems) {
+                const rawMaterial = data.rawMaterials.find(rm => rm.id === item.raw_material_id);
+                 if (!rawMaterial) continue;
+                const pricePerKg = priceOverrides.materials[rawMaterial.id];
+                
+                let quantityInKg = item.quantity;
+                if (rawMaterial.unit.toLowerCase() === 'gr') {
+                    quantityInKg = item.quantity / 1000;
+                }
+                
+                const baseCost = pricePerKg * quantityInKg;
+                const lossPct = (rawMaterial.default_loss_pct || 0) / 100;
+                const totalItemCost = baseCost * (1 + lossPct);
+                totalMaterialCost += totalItemCost;
+
+                breakdown.push({
+                    section: 'مواد اولیه',
+                    name: rawMaterial.name,
+                    quantity: item.quantity,
+                    unit: rawMaterial.unit,
+                    unit_price: rawMaterial.unit.toLowerCase() === 'gr' ? pricePerKg / 1000 : pricePerKg,
+                    total_cost: totalItemCost,
+                });
+            }
+
+            // 2. Operational Costs - Use latest rates, not overrides
+            let totalOpCost = 0;
+            const opCostRates = getLatestPrices(recipeId).ops;
+
+            for (const opRate of opCostRates) {
+                 let cost = 0;
+                 let quantity = 0;
+                 let unit = '';
+                 let unit_price = opRate.rate_value;
+
+                 switch(opRate.unit.trim()) {
+                     case '%_of_material_cost':
+                         cost = totalMaterialCost * opRate.rate_value;
+                         quantity = opRate.rate_value * 100;
+                         unit = '% از هزینه مواد';
+                         break;
+                     case 'hour':
+                         const hours = recipe.production_time || 0;
+                         cost = hours * opRate.rate_value;
+                         quantity = hours;
+                         unit = 'ساعت';
+                         break;
+                    case 'unit':
+                    case 'fixed':
+                         cost = opRate.rate_value;
+                         quantity = 1;
+                         unit = 'بسته';
+                         break;
+                 }
+                 if(cost > 0) {
+                     totalOpCost += cost;
+                     breakdown.push({
+                         section: 'هزینه عملیاتی',
+                         name: opRate.name,
+                         quantity: quantity,
+                         unit: unit,
+                         unit_price: unit_price,
+                         total_cost: cost,
+                     });
+                 }
+            }
+            
+            const totalBatchCost = totalMaterialCost + totalOpCost;
+            const costPerKg = plannedOutputKg > 0 ? totalBatchCost / plannedOutputKg : 0;
+            const salesPricePerKg = costPerKg * (1 + (profitMargin / 100));
+
+            return { costPerKg, totalBatchCost, breakdown, salesPricePerKg };
+        }
+
+        function displayCalculationResults(results) {
+            // Render Summary
+            dom.resultSummary.innerHTML = `
+                <div class="bg-green-100 border-2 border-green-500 p-4 rounded-lg">
+                    <div class="text-md text-green-800">قیمت پیشنهادی فروش (هر کیلوگرم)</div>
+                    <div class="font-extrabold text-3xl text-green-700 my-1">${formatNumber(Math.round(results.salesPricePerKg))} <span class="text-lg">تومان</span></div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <div class="text-sm text-blue-800">هزینه تمام‌شده هر کیلوگرم</div>
+                        <div class="font-extrabold text-2xl text-blue-700 my-1">${formatNumber(Math.round(results.costPerKg))} <span class="text-lg">تومان</span></div>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <div class="text-sm text-gray-600">هزینه کل بچ</div>
+                        <div class="font-bold text-xl">${formatNumber(Math.round(results.totalBatchCost))} <span class="text-sm">تومان</span></div>
+                    </div>
+                </div>
+            `;
+
+            // Render Details Table
+            let tableHTML = `
+                <h4 class="font-bold text-gray-700 mt-6 mb-2">جزئیات هزینه‌ها</h4>
+                <div class="overflow-x-auto border border-gray-200 rounded-lg">
+                    <table class="min-w-full text-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-3 text-right font-semibold">قلم هزینه</th>
+                                <th class="p-3 text-center font-semibold">مقدار</th>
+                                <th class="p-3 text-center font-semibold">قیمت واحد</th>
+                                <th class="p-3 text-left font-semibold">هزینه کل</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            results.breakdown.forEach((item, index) => {
+                const rowClass = index % 2 === 0 ? 'bg-white' : 'bg-gray-50';
+                tableHTML += `
+                    <tr class="${rowClass}">
+                        <td class="p-3 font-semibold text-gray-800">${item.name} <span class="text-xs text-gray-500 font-normal">(${item.section})</span></td>
+                        <td class="p-3 text-center text-gray-600">${formatNumber(item.quantity)} ${item.unit}</td>
+                        <td class="p-3 text-center text-gray-600">${formatNumber(Math.round(item.unit_price))}</td>
+                        <td class="p-3 text-left font-bold text-gray-900">${formatNumber(Math.round(item.total_cost))}</td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `
+                        </tbody>
+                        <tfoot>
+                           <tr class="bg-gray-200 font-bold">
+                              <td colspan="3" class="p-3 text-right">جمع کل هزینه‌ها</td>
+                              <td class="p-3 text-left">${formatNumber(Math.round(results.totalBatchCost))}</td>
+                           </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            `;
+            dom.resultDetails.innerHTML = tableHTML;
+        }
+
+        function handleFinalCalculation() {
+            const recipeId = Number(dom.recipeSelect.value);
+            const batchSize = Number(dom.batchSizeInput.value);
+            const profitMargin = Number(dom.profitMargin.value) || 0;
+
+            if (!recipeId || !batchSize) {
+                showToast("اطلاعات ورودی ناقص است.", "error");
+                return;
+            }
+
+            const priceOverrides = { materials: {} };
+            const pricesToSave = [];
+            const now = new Date().toISOString();
+            let allPricesFilled = true;
+
+            dom.priceConfirmationMaterials.querySelectorAll('input').forEach(input => {
+                const materialId = Number(input.dataset.id);
+                const priceValue = Number(toEnglishNumerals(input.value.replace(/,/g, '')));
+
+                if (materialId && (priceValue > 0 || priceValue === 0)) {
+                    priceOverrides.materials[materialId] = priceValue;
+                    pricesToSave.push({
+                        raw_material_id: materialId,
+                        user_id: user.id,
+                        price_per_unit: priceValue,
+                        effective_at: now
+                    });
+                } else {
+                    allPricesFilled = false;
+                }
+            });
+
+            if (!allPricesFilled) {
+                showToast('لطفاً قیمت تمام مواد اولیه را وارد کنید.', 'error');
+                return;
+            }
+
+            dom.calculatorStep2Combined.classList.add('hidden');
+            dom.calculatorStep3.classList.remove('hidden');
+            dom.calculatorLoader.classList.remove('hidden');
+            dom.calculatorResultsContent.classList.add('hidden');
+            dom.calculatorStep3.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+             setTimeout(async () => {
+                try {
+                    // Save prices in the background
+                    if (pricesToSave.length > 0) {
+                        const { error: savePriceError } = await supabase
+                            .from('rawmaterialprices')
+                            .insert(pricesToSave);
+                        if (savePriceError) {
+                            console.error("Error saving raw material prices:", savePriceError);
+                            // Don't block the user, just log the error and maybe show a subtle toast.
+                            showToast('خطا در ذخیره قیمت‌های جدید.', 'error');
+                        }
+                    }
+
+                    const results = calculateCost(recipeId, batchSize, priceOverrides, profitMargin);
+                    displayCalculationResults(results);
+
+                    if (results.costPerKg > 0) {
+                        const { error: logError } = await supabase
+                            .from('calculationbatches')
+                            .insert({
+                                recipe_id: recipeId,
+                                user_id: user.id,
+                                final_cost_per_kg: results.costPerKg
+                            });
+                        if (logError) {
+                            console.error("Error logging calculation:", logError);
+                        }
+                    }
+
+                    dom.calculatorLoader.classList.add('hidden');
+                    dom.calculatorResultsContent.classList.remove('hidden');
+                } catch (error) {
+                    console.error("Calculation Error:", error);
+                    showToast(error.message || 'خطا در محاسبه.', 'error');
+                    dom.calculatorLoader.classList.add('hidden');
+                }
+             }, 500);
+        }
+
+
         // --- App Initialization ---
         async function init() {
             try {
@@ -660,7 +1533,34 @@
                 setupEventListeners();
                 const savedUser = localStorage.getItem('protein-price-user');
                 if (savedUser) {
-                    user = JSON.parse(savedUser);
+                    const localUser = JSON.parse(savedUser);
+                    const { data: freshUser, error: userError } = await supabase
+                        .from('users')
+                        .select('*')
+                        .eq('id', localUser.id)
+                        .single();
+
+                    if (userError) {
+                        console.error("Error re-fetching user:", userError);
+                        user = localUser;
+                    } else {
+                        const { data: membership, error: membershipError } = await supabase
+                            .from('usermemberships')
+                            .select('id')
+                            .eq('user_id', freshUser.id)
+                            .maybeSingle();
+
+                        if (membershipError) {
+                            console.error("Error checking membership:", membershipError);
+                            freshUser.has_valid_membership = false;
+                        } else {
+                            freshUser.has_valid_membership = !!membership;
+                        }
+                        
+                        user = freshUser;
+                        localStorage.setItem('protein-price-user', JSON.stringify(user));
+                    }
+                    
                     await checkSubmissionStatus();
                     updateHomePageUI();
                     showPage('home-page');
@@ -752,6 +1652,72 @@
             });
             dom.reportTemplateSelect.addEventListener('change', handleReportProductChange);
             dom.reportCitySelect.addEventListener('change', fetchReport);
+
+            // Calculator Listeners
+            dom.goToCalculatorButton.addEventListener('click', async () => {
+                if (user && user.has_valid_membership) {
+                    showToast('در حال بارگذاری داده‌های ماشین حساب...', 'success');
+                    await setupCalculatorPage();
+                    showPage('calculator-page');
+                } else {
+                    showPage('membership-denied-page');
+                }
+            });
+            dom.calculatorBackButton.addEventListener('click', () => showPage('home-page'));
+            dom.recipeSelect.addEventListener('change', handleRecipeSelection);
+            dom.confirmAndCalculateButton.addEventListener('click', handleFinalCalculation);
+            dom.manageRecipesButton.addEventListener('click', openRecipeManagementPage);
+            dom.manageOpCostsButton.addEventListener('click', openOpCostsEditor);
+            
+            // Recipe Management Listeners
+            dom.recipeManagementBackButton.addEventListener('click', () => showPage('calculator-page'));
+            dom.addNewRecipeButton.addEventListener('click', () => openRecipeEditor());
+
+            // Recipe Editor Listeners
+            dom.recipeEditorBackButton.addEventListener('click', openRecipeManagementPage);
+            dom.addRecipeItemButton.addEventListener('click', () => addRecipeItemRow());
+            dom.recipeEditorForm.addEventListener('submit', handleSaveRecipe);
+            dom.recipeEditorForm.addEventListener('input', (e) => {
+                // Any input/select change within the items container, or the yield input, should trigger recalculation.
+                const target = e.target;
+                if (
+                    (target.tagName === 'INPUT' && target.type === 'number' && target.closest('#recipe-items-container')) ||
+                    (target.tagName === 'SELECT' && target.closest('#recipe-items-container')) ||
+                    target.id === 'recipe-yield'
+                ) {
+                    calculateAndUpdateBatchSize();
+                }
+            });
+            
+            // Operational Costs Listeners
+            dom.opCostsBackButton.addEventListener('click', () => showPage('calculator-page'));
+            dom.opCostsForm.addEventListener('submit', handleSaveOpCosts);
+
+            // Membership Listeners
+            dom.membershipDeniedBackButton.addEventListener('click', () => showPage('home-page'));
+            dom.membershipContactButton.addEventListener('click', () => {
+                showToast('برای فعال‌سازی اشتراک با پشتیبانی تماس بگیرید.', 'success');
+            });
+
+            const numberInputFormatter = (e) => {
+                const input = e.target;
+                if (input.tagName === 'INPUT' && input.getAttribute('inputmode') === 'numeric') {
+                    const value = toEnglishNumerals(input.value.replace(/,/g, ''));
+                    
+                    if (value === '' || isNaN(value)) {
+                        if (input.value !== '') input.value = '';
+                        return;
+                    }
+                    
+                    const formattedValue = formatNumber(value);
+                    if (input.value !== formattedValue) {
+                        input.value = formattedValue;
+                    }
+                }
+            };
+
+            dom.priceConfirmationMaterials.addEventListener('input', numberInputFormatter);
+            dom.opCostsContainer.addEventListener('input', numberInputFormatter);
         }
         
         document.addEventListener('DOMContentLoaded', init);
