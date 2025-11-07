@@ -113,6 +113,7 @@
                 <div>
                     <label class="font-semibold text-gray-700 mb-2 block">۴. قیمت فروش بسته (به تومان)</label>
                     <input id="submit-price-input" type="text" inputmode="numeric" placeholder="مثلاً: ۱۵۰,۰۰۰" class="w-full p-3 border border-gray-300 rounded-lg">
+                    <p id="submit-price-farsi" class="text-sm text-gray-500 mt-2 h-6"></p> <!-- New Farsi display -->
                     <p id="standard-price-display" class="text-sm text-teal-700 mt-2 bg-teal-50 p-2 rounded-md hidden"></p>
                 </div>
                 <div class="pt-4"> <button id="submit-price-button" type="submit" class="w-full py-3 px-4 rounded-lg font-bold text-lg bg-teal-600 text-white">قفل قیمت این ماه</button> </div>
@@ -122,7 +123,7 @@
         <!-- Market Report Page -->
         <div id="market-report-page" class="page">
              <div class="bg-white shadow-sm p-4 sticky top-0 z-10 flex items-center">
-                <button id="report-back-button" class="text-teal-600 ml-4"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> </button>
+                <button id="report-back-button" class="text-teal-600 ml-4"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> </button>
                 <h1 class="text-xl font-bold text-gray-800 flex-grow">گزارش بازار</h1>
             </div>
             <div id="report-access-denied" class="flex-grow flex flex-col items-center justify-center p-8 text-center hidden">
@@ -134,9 +135,9 @@
             </div>
             <div id="report-content" class="p-6 space-y-4 hidden">
                  <div class="grid grid-cols-2 gap-4">
-                     <div> <label class="font-semibold text-gray-700 mb-2 block">محصول</label> <select id="report-template-select" class="w-full p-3 border border-gray-300 rounded-lg bg-white"></select> </div>
-                     <div> <label class="font-semibold text-gray-700 mb-2 block">شهر</label> <select id="report-city-select" class="w-full p-3 border border-gray-300 rounded-lg bg-white"></select> </div>
-                </div>
+                      <div> <label class="font-semibold text-gray-700 mb-2 block">محصول</label> <select id="report-template-select" class="w-full p-3 border border-gray-300 rounded-lg bg-white"></select> </div>
+                      <div> <label class="font-semibold text-gray-700 mb-2 block">شهر</label> <select id="report-city-select" class="w-full p-3 border border-gray-300 rounded-lg bg-white"></select> </div>
+                 </div>
                 <div class="bg-white rounded-xl shadow-md p-6">
                     <div id="report-loader" class="flex justify-center items-center p-8"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div></div>
                     <div id="report-data-view" class="hidden">
@@ -163,7 +164,7 @@
         <!-- History Page -->
         <div id="history-page" class="page">
              <div class="bg-white shadow-sm p-4 sticky top-0 z-10 flex items-center">
-                <button id="history-back-button" class="text-teal-600 ml-4"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> </button>
+                <button id="history-back-button" class="text-teal-600 ml-4"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> </button>
                 <h1 class="text-xl font-bold text-gray-800 flex-grow">سوابق ثبت قیمت</h1>
             </div>
             <div class="p-6 flex-grow">
@@ -179,7 +180,7 @@
         <!-- Cost Calculator Page -->
         <div id="calculator-page" class="page">
             <div class="bg-white shadow-sm p-4 sticky top-0 z-10 flex items-center">
-                <button id="calculator-back-button" class="text-teal-600 ml-4"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> </button>
+                <button id="calculator-back-button" class="text-teal-600 ml-4"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> </button>
                 <h1 class="text-xl font-bold text-gray-800 flex-grow">ابزار قیمت گذاری</h1>
             </div>
             <div class="p-6 space-y-6">
@@ -197,12 +198,36 @@
                 <!-- Step 2: Input Parameters & Confirm Prices -->
                 <div id="calculator-step-2-combined" class="hidden space-y-4 bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-bold text-gray-800">۲. ورودی‌ها و قیمت‌ها</h3>
-                    <div class="grid grid-cols-2 gap-4">
+                    
+                    <!-- New 3-column grid -->
+                    <div class="grid grid-cols-3 gap-4">
                         <div class="space-y-2">
-                            <label for="batch-size" class="font-semibold text-gray-700 block text-sm">وزن خروجی بچ (کیلوگرم):</label>
-                            <input type="number" id="batch-size" placeholder="مثلاً: 150" class="w-full p-3 border border-gray-300 rounded-lg">
+                            <label for="base-batch-weight-display" class="font-semibold text-gray-700 block text-sm">خروجی بعد از پخت (کیلوگرم)</label>
+                            <input type="text" id="base-batch-weight-display" class="w-full p-3 border border-gray-200 bg-gray-100 rounded-lg text-center" readonly>
+                            <input type="hidden" id="base-batch-weight-hidden"> <!-- To store the raw number -->
                         </div>
                         <div class="space-y-2">
+                            <label for="batch-multiplier-input" class="font-semibold text-gray-700 block text-sm">ضریب پخت (میزان تولید چند برابر رسپی است؟)</label>
+                            <input type="number" id="batch-multiplier-input" step="0.1" placeholder="مثلاً: 1.5" value="1" class="w-full p-3 border border-gray-300 rounded-lg text-center">
+                        </div>
+                        <div class="space-y-2">
+                            <label for="batch-size" class="font-semibold text-gray-700 block text-sm">وزن خروجی هدف (کیلوگرم)</label>
+                            <input type="text" id="batch-size" class="w-full p-3 border border-gray-200 bg-gray-100 rounded-lg text-center" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Existing fields, now in a 2-col grid -->
+                    <div class="grid grid-cols-2 gap-4 pt-2">
+                        <div class="space-y-2">
+                            <label for="production-time-input" class="font-semibold text-gray-700 block text-sm">زمان تولید (اصلی) (ساعت):</label>
+                            <input type="number" id="production-time-input" step="0.1" placeholder="مثلاً: 4.5" class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <!-- NEW: Assistant Production Time -->
+                        <div class="space-y-2">
+                            <label for="assistant-production-time-input" class="font-semibold text-gray-700 block text-sm">زمان دستیار (ساعت):</label>
+                            <input type="number" id="assistant-production-time-input" step="0.1" placeholder="مثلاً: 3.0" class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div class="space-y-2 col-span-2">
                             <label for="profit-margin" class="font-semibold text-gray-700 block text-sm">حاشیه سود مورد نظر (%):</label>
                             <input type="number" id="profit-margin" placeholder="مثلاً: 30" value="30" class="w-full p-3 border border-gray-300 rounded-lg">
                         </div>
@@ -233,7 +258,7 @@
         <!-- Recipe Management Page -->
         <div id="recipe-management-page" class="page">
             <div class="bg-white shadow-sm p-4 sticky top-0 z-10 flex items-center">
-                <button id="recipe-management-back-button" class="text-teal-600 ml-4"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> </button>
+                <button id="recipe-management-back-button" class="text-teal-600 ml-4"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> </button>
                 <h1 class="text-xl font-bold text-gray-800 flex-grow">مدیریت رسپی‌ها</h1>
             </div>
             <div class="p-6 space-y-4 flex-grow flex flex-col">
@@ -250,7 +275,7 @@
         <!-- Recipe Editor Page -->
         <div id="recipe-editor-page" class="page">
             <div class="bg-white shadow-sm p-4 sticky top-0 z-10 flex items-center">
-                <button id="recipe-editor-back-button" class="text-teal-600 ml-4"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> </button>
+                <button id="recipe-editor-back-button" class="text-teal-600 ml-4"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> </button>
                 <h1 id="recipe-editor-title" class="text-xl font-bold text-gray-800 flex-grow">افزودن / ویرایش رسپی</h1>
             </div>
             <form id="recipe-editor-form" class="p-6 space-y-6 flex-grow flex flex-col">
@@ -263,16 +288,19 @@
                         <div>
                             <label for="recipe-yield" class="font-semibold text-gray-700 block mb-1">بازدهی پخت (%)</label>
                             <input type="number" id="recipe-yield" required class="w-full p-3 border border-gray-300 rounded-lg" placeholder="مثلاً: 85">
+                            <p class="text-xs text-gray-500 mt-1">راهنمایی: این عدد (وزن پخته به خام) معمولاً بین ۹۰ تا ۹۵٪ است.</p>
                         </div>
                         <div>
-                            <label for="recipe-batch-size" class="font-semibold text-gray-700 block mb-1">وزن بچ (کیلوگرم)</label>
+                            <label for="recipe-batch-size" class="font-semibold text-gray-700 block mb-1">خروجی بعد از پخت (کیلوگرم)</label>
                             <input type="number" id="recipe-batch-size" step="0.01" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="مثلاً: 100.50">
                         </div>
                     </div>
+                    <!-- REMOVED Production Time
                     <div >
                         <label for="recipe-production-time" class="font-semibold text-gray-700 block mb-1">زمان تولید بچ (ساعت)</label>
                         <input type="number" id="recipe-production-time" step="0.1" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="مثلاً: 4.5">
                     </div>
+                    -->
                     
                     <hr class="my-6">
 
@@ -294,7 +322,7 @@
         <!-- NEW: Operational Costs Page -->
         <div id="op-costs-page" class="page">
             <div class="bg-white shadow-sm p-4 sticky top-0 z-10 flex items-center">
-                <button id="op-costs-back-button" class="text-teal-600 ml-4"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> </button>
+                <button id="op-costs-back-button" class="text-teal-600 ml-4"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> </button>
                 <h1 class="text-xl font-bold text-gray-800 flex-grow">مدیریت هزینه‌های عملیاتی</h1>
             </div>
             <form id="op-costs-form" class="p-6 space-y-4 flex-grow flex flex-col">
@@ -311,7 +339,7 @@
         <!-- Membership Denied Page -->
         <div id="membership-denied-page" class="page">
             <div class="bg-white shadow-sm p-4 sticky top-0 z-10 flex items-center">
-                <button id="membership-denied-back-button" class="text-teal-600 ml-4"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> </button>
+                <button id="membership-denied-back-button" class="text-teal-600 ml-4"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> </button>
                 <h1 class="text-xl font-bold text-gray-800 flex-grow">دسترسی ویژه</h1>
             </div>
             <div class="flex-grow flex flex-col items-center justify-center p-8 text-center">
@@ -408,7 +436,12 @@
             calculatorStep3: document.getElementById('calculator-step-3'),
             recipeSelect: document.getElementById('recipe-select'),
             batchSizeInput: document.getElementById('batch-size'),
+            baseBatchWeightDisplay: document.getElementById('base-batch-weight-display'), // ADDED
+            baseBatchWeightHidden: document.getElementById('base-batch-weight-hidden'), // ADDED
+            batchMultiplierInput: document.getElementById('batch-multiplier-input'), // ADDED
             profitMargin: document.getElementById('profit-margin'),
+            productionTimeInput: document.getElementById('production-time-input'), 
+            assistantProductionTimeInput: document.getElementById('assistant-production-time-input'), // ADDED
             priceConfirmationMaterials: document.getElementById('price-confirmation-materials'),
             priceConfirmationOps: document.getElementById('price-confirmation-ops'),
             confirmAndCalculateButton: document.getElementById('confirm-and-calculate-button'),
@@ -429,7 +462,7 @@
             recipeName: document.getElementById('recipe-name'),
             recipeYield: document.getElementById('recipe-yield'),
             recipeBatchSize: document.getElementById('recipe-batch-size'),
-            recipeProductionTime: document.getElementById('recipe-production-time'),
+            // recipeProductionTime: document.getElementById('recipe-production-time'), // REMOVED
             recipeItemsContainer: document.getElementById('recipe-items-container'),
             addRecipeItemButton: document.getElementById('add-recipe-item-button'),
             saveRecipeButton: document.getElementById('save-recipe-button'),
@@ -476,6 +509,88 @@
             dom.toast.classList.add('show');
             setTimeout(() => { dom.toast.classList.remove('show'); }, 4000);
         };
+
+        // --- NEW Farsi Number to Words Converter ---
+        const numberToFarsiWords = (number) => {
+            const strNumber = toEnglishNumerals(String(number)).replace(/,/g, '');
+            if (strNumber === '' || isNaN(strNumber)) return '';
+            
+            const num = parseInt(strNumber, 10);
+            if (num === 0) return 'صفر';
+
+            const units = ['', 'هزار', 'میلیون', 'میلیارد'];
+            const ones = ['', 'یک', 'دو', 'سه', 'چهار', 'پنج', 'شش', 'هفت', 'هشت', 'نه'];
+            const teens = ['ده', 'یازده', 'دوازده', 'سیزده', 'چهارده', 'پانزده', 'شانزده', 'هفده', 'هجده', 'نوزده'];
+            const tens = ['', 'ده', 'بیست', 'سی', 'چهل', 'پنجاه', 'شصت', 'هفتاد', 'هشتاد', 'نود'];
+            const hundreds = ['', 'صد', 'دویست', 'سیصد', 'چهارصد', 'پانصد', 'ششصد', 'هفتصد', 'هشتصد', 'نهصد'];
+
+            const convertThreeDigits = (n) => {
+                let parts = [];
+                const h = Math.floor(n / 100);
+                if (h > 0) {
+                    parts.push(hundreds[h]);
+                }
+                
+                const t = n % 100;
+                if (t > 0) {
+                    if (t < 10) {
+                        parts.push(ones[t]);
+                    } else if (t < 20) {
+                        parts.push(teens[t - 10]);
+                    } else {
+                        const t1 = Math.floor(t / 10);
+                        const t2 = t % 10;
+                        parts.push(tens[t1]);
+                        if (t2 > 0) {
+                            parts.push(ones[t2]);
+                        }
+                    }
+                }
+                return parts.join(' و ');
+            };
+
+            let parts = [];
+            let chunkCount = 0;
+            let n = num;
+
+            while (n > 0) {
+                const chunk = n % 1000;
+                if (chunk > 0) {
+                    const chunkWords = convertThreeDigits(chunk);
+                    const unitName = units[chunkCount] ? ' ' + units[chunkCount] : '';
+                    parts.unshift(chunkWords + unitName);
+                }
+                n = Math.floor(n / 1000);
+                chunkCount++;
+            }
+
+            return parts.join(' و ');
+        };
+
+        // --- NEW Helper to update Farsi display ---
+        const updateFarsiDisplay = (inputElement, displayElement) => {
+            const value = toEnglishNumerals(inputElement.value.replace(/,/g, ''));
+            if (value && value !== '0') {
+                const farsiText = numberToFarsiWords(value);
+                displayElement.textContent = farsiText + ' تومان';
+            } else {
+                displayElement.textContent = '';
+            }
+        };
+
+        // --- NEW Helper to translate units ---
+        const translateUnit = (unit) => {
+            if (!unit) return '';
+            switch (unit.toLowerCase().trim()) {
+                case 'gr': return 'گرم';
+                case 'kg': return 'کیلوگرم';
+                case 'hour': return 'ساعت';
+                case '% از هزینه مواد': return '% از هزینه مواد';
+                case 'بسته': return 'بسته';
+                default: return unit;
+            }
+        };
+
 
         // --- Data Fetching Functions ---
         async function fetchCalculatorData(userId) {
@@ -582,6 +697,7 @@
             populateSelect(dom.submitVariantSelect, variants, 'id', 'name', 'یک گزینه را انتخاب کنید');
             dom.submitPriceInput.value = '';
             dom.standardPriceDisplay.classList.add('hidden');
+            document.getElementById('submit-price-farsi').textContent = ''; // Clear Farsi text
         }
 
         function updateSubmitPageUI() {
@@ -911,6 +1027,26 @@
             dom.calculatorStep3.classList.add('hidden');
         }
 
+        // NEW function to calculate target weight
+        function calculateTargetWeight() {
+            const baseWeight = Number(dom.baseBatchWeightHidden.value) || 0;
+            let multiplierStr = dom.batchMultiplierInput.value.trim();
+            let multiplier = 1; // Default to 1
+
+            if (multiplierStr !== '') {
+                const parsedMultiplier = Number(multiplierStr);
+                if (!isNaN(parsedMultiplier) && parsedMultiplier > 0) {
+                    multiplier = parsedMultiplier;
+                } else if (multiplierStr === '.') {
+                    // Allow typing decimal
+                    return;
+                }
+            }
+            
+            const targetWeight = baseWeight * multiplier;
+            dom.batchSizeInput.value = targetWeight > 0 ? targetWeight.toFixed(2) : ''; 
+        }
+
         async function handleRecipeSelection() {
             const recipeId = Number(dom.recipeSelect.value);
             dom.calculatorStep3.classList.add('hidden');
@@ -922,13 +1058,22 @@
 
             const selectedRecipe = appData.calculatorData.recipes.find(r => r.id === recipeId);
             if (selectedRecipe) {
-                dom.batchSizeInput.value = selectedRecipe.default_batch_kg;
+                // NEW logic
+                const baseWeight = selectedRecipe.default_batch_kg || 0;
+                dom.baseBatchWeightDisplay.value = baseWeight > 0 ? baseWeight.toFixed(2) : '';
+                dom.baseBatchWeightHidden.value = baseWeight;
+                dom.batchMultiplierInput.value = '1';
+                calculateTargetWeight(); // Calculate target weight based on default multiplier
+                
+                dom.productionTimeInput.value = ''; // Clear production time
+                dom.assistantProductionTimeInput.value = ''; // ADDED: Clear assistant time
                 await updatePriceInputs();
                 dom.calculatorStep2Combined.classList.remove('hidden');
                 dom.calculatorStep2Combined.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         }
         
+        // --- FUNCTIONS THAT WERE MISSING ---
         function openRecipeManagementPage() {
             dom.recipeListContainer.innerHTML = '';
             const recipes = appData.calculatorData.recipes;
@@ -964,7 +1109,7 @@
                     dom.recipeName.value = recipe.name;
                     dom.recipeYield.value = recipe.yield_pct;
                     dom.recipeBatchSize.value = recipe.default_batch_kg;
-                    dom.recipeProductionTime.value = recipe.production_time;
+                    // dom.recipeProductionTime.value = recipe.production_time; // REMOVED
                     recipeItems.forEach(item => addRecipeItemRow(item.raw_material_id, item.quantity));
                 }
             } else {
@@ -1011,35 +1156,71 @@
             itemRow.className = 'grid grid-cols-12 gap-2 items-center';
             
             const selectContainer = document.createElement('div');
-            selectContainer.className = 'col-span-6';
+            selectContainer.className = 'col-span-5'; // Adjusted
             const select = document.createElement('select');
             select.className = 'w-full p-2 border border-gray-300 rounded-md bg-white';
-            populateSelect(select, appData.calculatorData.rawMaterials, 'id', 'name', 'انتخاب ماده اولیه...');
-            if (rawMaterialId) select.value = rawMaterialId;
-
+            populateSelect(select, appData.calculatorData.rawMaterials, 'id', 'name', 'انتخاب ماده...');
+            
             const quantityContainer = document.createElement('div');
-            quantityContainer.className = 'col-span-4';
+            quantityContainer.className = 'col-span-3'; // Adjusted
             const quantityInput = document.createElement('input');
             quantityInput.type = 'number';
+            quantityInput.step = '0.1';
             quantityInput.className = 'w-full p-2 border border-gray-300 rounded-md';
             quantityInput.placeholder = 'مقدار';
             if (quantity) quantityInput.value = quantity;
+
+            // --- New Unit Display ---
+            const unitContainer = document.createElement('div');
+            unitContainer.className = 'col-span-2'; // New
+            const unitSpan = document.createElement('span');
+            unitSpan.className = 'text-sm text-gray-600 px-1';
+            unitSpan.textContent = 'گرم'; // Default changed from '...'
+            unitContainer.appendChild(unitSpan);
+            // --- End New Unit Display ---
             
             const removeBtnContainer = document.createElement('div');
-            removeBtnContainer.className = 'col-span-2 text-center';
+            removeBtnContainer.className = 'col-span-2 text-center'; // Adjusted
             const removeBtn = document.createElement('button');
             removeBtn.type = 'button';
-            removeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500 mx-auto"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`;
+            removeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500 mx-auto"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`;
             removeBtn.onclick = () => {
                 itemRow.remove();
                 calculateAndUpdateBatchSize();
             };
 
+            // --- Event Listener for Select ---
+            select.addEventListener('change', () => {
+                const selectedMaterialId = select.value;
+                const material = appData.calculatorData.rawMaterials.find(rm => rm.id == selectedMaterialId);
+                if (material) {
+                    unitSpan.textContent = material.unit || '...';
+                } else {
+                    unitSpan.textContent = '...';
+                }
+                // Also trigger batch size recalculation
+                calculateAndUpdateBatchSize(); 
+            });
+
+            // --- Set initial value and unit ---
+            if (rawMaterialId) {
+                select.value = rawMaterialId;
+                const material = appData.calculatorData.rawMaterials.find(rm => rm.id == rawMaterialId);
+                if (material) {
+                    unitSpan.textContent = material.unit || '...';
+                }
+            } else {
+                unitSpan.textContent = 'گرم'; // Default changed from '...'
+            }
+            // --- End Set initial ---
+
             selectContainer.appendChild(select);
             quantityContainer.appendChild(quantityInput);
             removeBtnContainer.appendChild(removeBtn);
+            
             itemRow.appendChild(selectContainer);
             itemRow.appendChild(quantityContainer);
+            itemRow.appendChild(unitContainer); // Add unit
             itemRow.appendChild(removeBtnContainer);
             
             dom.recipeItemsContainer.appendChild(itemRow);
@@ -1050,7 +1231,7 @@
             const recipeName = dom.recipeName.value.trim();
             const yieldPct = dom.recipeYield.value;
             const batchSize = dom.recipeBatchSize.value;
-            const productionTime = dom.recipeProductionTime.value;
+            // const productionTime = dom.recipeProductionTime.value; // REMOVED
 
             if (!recipeName || !yieldPct) {
                 showToast('نام رسپی و بازدهی پخت الزامی است.', 'error');
@@ -1066,7 +1247,7 @@
                     name: recipeName,
                     yield_pct: Number(yieldPct),
                     default_batch_kg: batchSize ? Number(batchSize) : null,
-                    production_time: productionTime ? Number(productionTime) : null,
+                    // production_time: productionTime ? Number(productionTime) : null, // REMOVED
                 };
 
                 if (currentEditingRecipeId) {
@@ -1083,11 +1264,12 @@
                 
                 const newRecipeId = recipeData.id;
 
+                // If editing, clear old items first
                 if (currentEditingRecipeId) {
                     const { error: deleteError } = await supabase
                         .from('recipeitems')
                         .delete()
-                        .eq('recipe_id', newRecipeId);
+                        .eq('recipe_id', newRecipeId); // newRecipeId is correct, it's the ID of the recipe we just upserted
                     if (deleteError) throw deleteError;
                 }
 
@@ -1145,6 +1327,7 @@
                 wrapper.innerHTML = `
                     <label for="op-cost-${type.id}" class="font-semibold text-gray-700 block mb-1">${labelText}</label>
                     <input type="text" inputmode="numeric" id="op-cost-${type.id}" data-type-id="${type.id}" data-unit="${type.unit}" class="w-full p-3 border border-gray-300 rounded-lg text-left" value="${formatNumber(displayValue)}">
+                    <p class="text-sm text-gray-500 mt-1 h-6 price-farsi-display"></p> <!-- New Farsi display -->
                 `;
                 dom.opCostsContainer.appendChild(wrapper);
             });
@@ -1264,9 +1447,12 @@
                 const placeholder = !priceValue && priceValue !== 0 ? 'قیمت را وارد کنید' : '';
                 
                 materialHTML += `
-                    <div class="grid grid-cols-2 gap-2 items-center">
-                        <label for="mat-price-${m.id}" class="text-sm text-gray-800">${m.name} (تومان / کیلوگرم)</label>
-                        <input type="text" inputmode="numeric" id="mat-price-${m.id}" data-id="${m.id}" data-type="material" class="w-full p-2 border rounded-md text-left ${missingPriceClass}" value="${formatNumber(priceValue)}" placeholder="${placeholder}">
+                    <div> <!-- Wrapper Div -->
+                        <div class="grid grid-cols-2 gap-2 items-center">
+                            <label for="mat-price-${m.id}" class="text-sm text-gray-800">${m.name} (تومان / کیلوگرم)</label>
+                            <input type="text" inputmode="numeric" id="mat-price-${m.id}" data-id="${m.id}" data-type="material" class="w-full p-2 border rounded-md text-left ${missingPriceClass}" value="${formatNumber(priceValue)}" placeholder="${placeholder}">
+                        </div>
+                        <p class="text-sm text-gray-500 mt-1 h-6 price-farsi-display"></p> <!-- Moved P tag here -->
                     </div>
                 `;
             });
@@ -1289,8 +1475,10 @@
             }
             dom.priceConfirmationOps.innerHTML = opsHTML;
         }
-        
-        function calculateCost(recipeId, plannedOutputKg, priceOverrides, profitMargin) {
+        // --- END OF MISSING FUNCTIONS ---
+
+        // MODIFIED: Added assistantProductionTime argument
+        function calculateCost(recipeId, plannedOutputKg, mainProductionTime, assistantProductionTime, priceOverrides, profitMargin) {
             const data = appData.calculatorData;
             const recipe = data.recipes.find(r => r.id === recipeId);
             const recipeItems = data.recipeItems.filter(i => i.recipe_id === recipeId);
@@ -1304,12 +1492,26 @@
                  if (!rawMaterial) continue;
                 const pricePerKg = priceOverrides.materials[rawMaterial.id];
                 
-                let quantityInKg = item.quantity;
-                if (rawMaterial.unit.toLowerCase() === 'gr') {
+                let quantityInKg;
+                const unit = rawMaterial.unit.toLowerCase();
+                if (unit === 'kg') {
+                    quantityInKg = item.quantity;
+                } else if (unit === 'gr') {
+                    quantityInKg = item.quantity / 1000;
+                } else {
+                    // Default to grams for 'ml', 'pcs', or unknown units
                     quantityInKg = item.quantity / 1000;
                 }
-                
-                const baseCost = pricePerKg * quantityInKg;
+
+                // --- Scale quantity based on multiplier ---
+                // We need to find the base batch size for this recipe
+                const baseBatchSize = recipe.default_batch_kg || plannedOutputKg; // Fallback to plannedOutputKg if not set
+                const multiplier = (plannedOutputKg / baseBatchSize) || 1;
+                const scaledQuantityInKg = quantityInKg * multiplier;
+                // --- End scaling ---
+
+
+                const baseCost = pricePerKg * scaledQuantityInKg; // Use scaled quantity
                 const lossPct = (rawMaterial.default_loss_pct || 0) / 100;
                 const totalItemCost = baseCost * (1 + lossPct);
                 totalMaterialCost += totalItemCost;
@@ -1317,7 +1519,7 @@
                 breakdown.push({
                     section: 'مواد اولیه',
                     name: rawMaterial.name,
-                    quantity: item.quantity,
+                    quantity: item.quantity * multiplier, // Store scaled quantity
                     unit: rawMaterial.unit,
                     unit_price: rawMaterial.unit.toLowerCase() === 'gr' ? pricePerKg / 1000 : pricePerKg,
                     total_cost: totalItemCost,
@@ -1335,34 +1537,41 @@
                  let unit_price = opRate.rate_value;
 
                  switch(opRate.unit.trim()) {
-                     case '%_of_material_cost':
-                         cost = totalMaterialCost * opRate.rate_value;
-                         quantity = opRate.rate_value * 100;
-                         unit = '% از هزینه مواد';
-                         break;
-                     case 'hour':
-                         const hours = recipe.production_time || 0;
-                         cost = hours * opRate.rate_value;
-                         quantity = hours;
-                         unit = 'ساعت';
-                         break;
-                    case 'unit':
-                    case 'fixed':
-                         cost = opRate.rate_value;
-                         quantity = 1;
-                         unit = 'بسته';
-                         break;
+                      case '%_of_material_cost':
+                           cost = totalMaterialCost * opRate.rate_value;
+                           quantity = opRate.rate_value * 100;
+                           unit = '% از هزینه مواد';
+                           break;
+                      case 'hour':
+                            // NEW LOGIC: Check if this is an assistant cost
+                            let hours = 0;
+                            if (opRate.name && opRate.name.includes('دستیار')) {
+                                hours = assistantProductionTime || 0; // Use assistant time
+                            } else {
+                                hours = mainProductionTime || 0; // Use main time
+                            }
+                            
+                           cost = hours * opRate.rate_value;
+                           quantity = hours;
+                           unit = 'ساعت';
+                           break;
+                     case 'unit':
+                     case 'fixed':
+                           cost = opRate.rate_value; // This is a fixed cost per batch, regardless of multiplier
+                           quantity = 1;
+                           unit = 'بسته';
+                           break;
                  }
                  if(cost > 0) {
-                     totalOpCost += cost;
-                     breakdown.push({
-                         section: 'هزینه عملیاتی',
-                         name: opRate.name,
-                         quantity: quantity,
-                         unit: unit,
-                         unit_price: unit_price,
-                         total_cost: cost,
-                     });
+                      totalOpCost += cost;
+                      breakdown.push({
+                           section: 'هزینه عملیاتی',
+                           name: opRate.name,
+                           quantity: quantity,
+                           unit: unit,
+                           unit_price: unit_price,
+                           total_cost: cost,
+                      });
                  }
             }
             
@@ -1386,7 +1595,7 @@
                         <div class="font-extrabold text-2xl text-blue-700 my-1">${formatNumber(Math.round(results.costPerKg))} <span class="text-lg">تومان</span></div>
                     </div>
                     <div class="bg-gray-100 p-4 rounded-lg">
-                        <div class="text-sm text-gray-600">هزینه کل بچ</div>
+                        <div class="text-sm text-gray-600">هزینه کل محصول تولیدی</div>
                         <div class="font-bold text-xl">${formatNumber(Math.round(results.totalBatchCost))} <span class="text-sm">تومان</span></div>
                     </div>
                 </div>
@@ -1400,8 +1609,8 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="p-3 text-right font-semibold">قلم هزینه</th>
-                                <th class="p-3 text-center font-semibold">مقدار</th>
-                                <th class="p-3 text-center font-semibold">قیمت واحد</th>
+                                <th class="p-3 text-center font-semibold">مقدار در تولید این محصول</th>
+                                <!-- <th class="p-3 text-center font-semibold">قیمت واحد</th> --> <!-- Removed this column -->
                                 <th class="p-3 text-left font-semibold">هزینه کل</th>
                             </tr>
                         </thead>
@@ -1410,11 +1619,12 @@
 
             results.breakdown.forEach((item, index) => {
                 const rowClass = index % 2 === 0 ? 'bg-white' : 'bg-gray-50';
+                const translatedUnit = translateUnit(item.unit); // Translate unit
                 tableHTML += `
                     <tr class="${rowClass}">
                         <td class="p-3 font-semibold text-gray-800">${item.name} <span class="text-xs text-gray-500 font-normal">(${item.section})</span></td>
-                        <td class="p-3 text-center text-gray-600">${formatNumber(item.quantity)} ${item.unit}</td>
-                        <td class="p-3 text-center text-gray-600">${formatNumber(Math.round(item.unit_price))}</td>
+                        <td class="p-3 text-center text-gray-600">${formatNumber(item.quantity.toFixed(1))} ${translatedUnit}</td>
+                        <!-- <td class="p-3 text-center text-gray-600">${formatNumber(Math.round(item.unit_price))}</td> --> <!-- Removed this cell -->
                         <td class="p-3 text-left font-bold text-gray-900">${formatNumber(Math.round(item.total_cost))}</td>
                     </tr>
                 `;
@@ -1423,10 +1633,10 @@
             tableHTML += `
                         </tbody>
                         <tfoot>
-                           <tr class="bg-gray-200 font-bold">
-                              <td colspan="3" class="p-3 text-right">جمع کل هزینه‌ها</td>
-                              <td class="p-3 text-left">${formatNumber(Math.round(results.totalBatchCost))}</td>
-                           </tr>
+                            <tr class="bg-gray-200 font-bold">
+                                <td colspan="2" class="p-3 text-right">جمع کل هزینه‌ها</td> <!-- Changed colspan from 3 to 2 -->
+                                <td class="p-3 text-left">${formatNumber(Math.round(results.totalBatchCost))}</td>
+                            </tr>
                         </tfoot>
                     </table>
                 </div>
@@ -1436,11 +1646,13 @@
 
         function handleFinalCalculation() {
             const recipeId = Number(dom.recipeSelect.value);
-            const batchSize = Number(dom.batchSizeInput.value);
+            const batchSize = Number(dom.batchSizeInput.value); // This now reads the calculated target weight
             const profitMargin = Number(dom.profitMargin.value) || 0;
+            const mainProductionTime = Number(dom.productionTimeInput.value); // RENAMED
+            const assistantProductionTime = Number(dom.assistantProductionTimeInput.value) || 0; // ADDED: Assistant time, defaults to 0 if empty
 
-            if (!recipeId || !batchSize) {
-                showToast("اطلاعات ورودی ناقص است.", "error");
+            if (!recipeId || !batchSize || batchSize <= 0 || !mainProductionTime) { // MODIFIED: Check mainProductionTime
+                showToast("لطفا رسپی، وزن خروجی هدف (با ضریب معتبر)، و زمان تولید (اصلی) را وارد کنید.", "error"); // MODIFIED: Updated message
                 return;
             }
 
@@ -1478,42 +1690,45 @@
             dom.calculatorStep3.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
              setTimeout(async () => {
-                try {
-                    // Save prices in the background
-                    if (pricesToSave.length > 0) {
-                        const { error: savePriceError } = await supabase
-                            .from('rawmaterialprices')
-                            .insert(pricesToSave);
-                        if (savePriceError) {
-                            console.error("Error saving raw material prices:", savePriceError);
-                            // Don't block the user, just log the error and maybe show a subtle toast.
-                            showToast('خطا در ذخیره قیمت‌های جدید.', 'error');
-                        }
-                    }
+                 try {
+                     // Save prices in the background
+                     if (pricesToSave.length > 0) {
+                         const { error: savePriceError } = await supabase
+                             .from('rawmaterialprices')
+                             .insert(pricesToSave);
+                         if (savePriceError) {
+                             console.error("Error saving raw material prices:", savePriceError);
+                             // Don't block the user, just log the error and maybe show a subtle toast.
+                             showToast('خطا در ذخیره قیمت‌های جدید.', 'error');
+                         }
+                     }
 
-                    const results = calculateCost(recipeId, batchSize, priceOverrides, profitMargin);
-                    displayCalculationResults(results);
+                     // MODIFIED: Pass both production times
+                     const results = calculateCost(recipeId, batchSize, mainProductionTime, assistantProductionTime, priceOverrides, profitMargin);
+                     displayCalculationResults(results);
 
-                    if (results.costPerKg > 0) {
-                        const { error: logError } = await supabase
-                            .from('calculationbatches')
-                            .insert({
-                                recipe_id: recipeId,
-                                user_id: user.id,
-                                final_cost_per_kg: results.costPerKg
-                            });
-                        if (logError) {
-                            console.error("Error logging calculation:", logError);
-                        }
-                    }
+                     if (results.costPerKg > 0) {
+                         const { error: logError } = await supabase
+                             .from('calculationbatches')
+                             .insert({
+                                 recipe_id: recipeId,
+                                 user_id: user.id,
+                                 final_cost_per_kg: results.costPerKg
+                                 // production_time_hours: productionTime, // Removed due to schema error
+                                 // batch_kg: batchSize // Removed due to schema error
+                             });
+                         if (logError) {
+                             console.error("Error logging calculation:", logError);
+                         }
+                     }
 
-                    dom.calculatorLoader.classList.add('hidden');
-                    dom.calculatorResultsContent.classList.remove('hidden');
-                } catch (error) {
-                    console.error("Calculation Error:", error);
-                    showToast(error.message || 'خطا در محاسبه.', 'error');
-                    dom.calculatorLoader.classList.add('hidden');
-                }
+                     dom.calculatorLoader.classList.add('hidden');
+                     dom.calculatorResultsContent.classList.remove('hidden');
+                 } catch (error) {
+                     console.error("Calculation Error:", error);
+                     showToast(error.message || 'خطا در محاسبه.', 'error');
+                     dom.calculatorLoader.classList.add('hidden');
+                 }
              }, 500);
         }
 
@@ -1534,6 +1749,7 @@
                 const savedUser = localStorage.getItem('protein-price-user');
                 if (savedUser) {
                     const localUser = JSON.parse(savedUser);
+                    // Re-fetch user to get latest info, especially membership
                     const { data: freshUser, error: userError } = await supabase
                         .from('users')
                         .select('*')
@@ -1541,9 +1757,11 @@
                         .single();
 
                     if (userError) {
+                        // If re-fetch fails, use local user but log error
                         console.error("Error re-fetching user:", userError);
                         user = localUser;
                     } else {
+                        // Check membership status for the fresh user
                         const { data: membership, error: membershipError } = await supabase
                             .from('usermemberships')
                             .select('id')
@@ -1558,6 +1776,7 @@
                         }
                         
                         user = freshUser;
+                        // Save the updated user (with correct membership) back to local storage
                         localStorage.setItem('protein-price-user', JSON.stringify(user));
                     }
                     
@@ -1607,9 +1826,10 @@
                     dom.reportContent.classList.remove('hidden'); dom.reportAccessDenied.classList.add('hidden');
                     populateSelect(dom.reportTemplateSelect, appData.templates, 'id', 'name', 'محصول را انتخاب کنید...');
                     if (appData.templates.length > 0) {
-                        dom.reportTemplateSelect.value = appData.templates[0].id;
+                        dom.reportTemplateSelect.value = appData.templates[0].id; // Default to first product
                         handleReportProductChange();
                     } else {
+                        // Handle case with no templates
                         const option = document.createElement('option');
                         option.textContent = 'محصولی یافت نشد'; option.disabled = true;
                         dom.reportTemplateSelect.appendChild(option);
@@ -1636,6 +1856,7 @@
                 const formatted = formatNumber(value);
                 e.target.value = formatted;
                 calculateStandardPrice();
+                updateFarsiDisplay(e.target, document.getElementById('submit-price-farsi')); // Update Farsi display
             });
             dom.submitBackButton.addEventListener('click', () => showPage('home-page'));
             dom.historyBackButton.addEventListener('click', () => showPage('home-page')); 
@@ -1665,6 +1886,7 @@
             });
             dom.calculatorBackButton.addEventListener('click', () => showPage('home-page'));
             dom.recipeSelect.addEventListener('change', handleRecipeSelection);
+            dom.batchMultiplierInput.addEventListener('input', calculateTargetWeight); // NEW
             dom.confirmAndCalculateButton.addEventListener('click', handleFinalCalculation);
             dom.manageRecipesButton.addEventListener('click', openRecipeManagementPage);
             dom.manageOpCostsButton.addEventListener('click', openOpCostsEditor);
@@ -1699,13 +1921,30 @@
                 showToast('برای فعال‌سازی اشتراک با پشتیبانی تماس بگیرید.', 'success');
             });
 
+            // Re-usable input formatter for numeric fields
             const numberInputFormatter = (e) => {
                 const input = e.target;
                 if (input.tagName === 'INPUT' && input.getAttribute('inputmode') === 'numeric') {
                     const value = toEnglishNumerals(input.value.replace(/,/g, ''));
                     
+                    // --- Find the Farsi display element ---
+                    let farsiDisplayElement = null;
+
+                    // Check for op-costs structure (input -> p)
+                    if (input.nextElementSibling && input.nextElementSibling.classList.contains('price-farsi-display')) {
+                        farsiDisplayElement = input.nextElementSibling;
+                    } 
+                    // Check for materials structure (div.grid -> p)
+                    else if (input.parentElement && input.parentElement.parentElement && input.parentElement.parentElement.nextElementSibling && input.parentElement.parentElement.nextElementSibling.classList.contains('price-farsi-display')) {
+                        farsiDisplayElement = input.parentElement.parentElement.nextElementSibling;
+                    }
+
                     if (value === '' || isNaN(value)) {
                         if (input.value !== '') input.value = '';
+                        // Clear Farsi display if input is cleared
+                        if (farsiDisplayElement) {
+                            farsiDisplayElement.textContent = '';
+                        }
                         return;
                     }
                     
@@ -1713,9 +1952,15 @@
                     if (input.value !== formattedValue) {
                         input.value = formattedValue;
                     }
+
+                    // Update Farsi display for dynamic inputs
+                    if (farsiDisplayElement) {
+                        updateFarsiDisplay(input, farsiDisplayElement);
+                    }
                 }
             };
 
+            // Apply formatter to dynamic containers
             dom.priceConfirmationMaterials.addEventListener('input', numberInputFormatter);
             dom.opCostsContainer.addEventListener('input', numberInputFormatter);
         }
@@ -1725,4 +1970,3 @@
     </script>
 </body>
 </html>
-
