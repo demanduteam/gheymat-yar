@@ -218,14 +218,28 @@
 
                     <!-- Existing fields, now in a 2-col grid -->
                     <div class="grid grid-cols-2 gap-4 pt-2">
+                        <!-- NEW: Setup Time -->
                         <div class="space-y-2">
-                            <label for="production-time-input" class="font-semibold text-gray-700 block text-sm">زمان تولید (اصلی) (ساعت):</label>
-                            <input type="number" id="production-time-input" step="0.1" placeholder="مثلاً: 4.5" class="w-full p-3 border border-gray-300 rounded-lg">
+                            <label for="setup-time-input" class="font-semibold text-gray-700 block text-sm">زمان آماده‌سازی (ساعت):</label>
+                            <input type="number" id="setup-time-input" step="0.1" placeholder="مثلاً: 0.5" class="w-full p-3 border border-gray-300 rounded-lg">
+                            <p class="text-xs text-gray-500 h-10">زمان ثابت اولیه (آماده‌سازی مواد، دستگاه و ...)</p>
                         </div>
-                        <!-- NEW: Assistant Production Time -->
+                        <div class="space-y-2">
+                            <label for="production-time-input" class="font-semibold text-gray-700 block text-sm">زمان تولید (خالص) (ساعت):</label>
+                            <input type="number" id="production-time-input" step="0.1" placeholder="مثلاً: 4.5" class="w-full p-3 border border-gray-300 rounded-lg">
+                            <p class="text-xs text-gray-500 h-10">زمان خالص کار دستگاه/تولید (بدون آماده‌سازی و نظافت)</p>
+                        </div>
+                        <!-- NEW: Cleaning Time -->
+                        <div class="space-y-2">
+                            <label for="cleaning-time-input" class="font-semibold text-gray-700 block text-sm">زمان نظافت (ساعت):</label>
+                            <input type="number" id="cleaning-time-input" step="0.1" placeholder="مثلاً: 0.5" class="w-full p-3 border border-gray-300 rounded-lg">
+                             <p class="text-xs text-gray-500 h-10">زمان ثابت پایانی (نظافت، خاموش کردن و ...)</p>
+                        </div>
+                        <!-- MODIFIED: Assistant Production Time -->
                         <div class="space-y-2">
                             <label for="assistant-production-time-input" class="font-semibold text-gray-700 block text-sm">زمان دستیار (ساعت):</label>
                             <input type="number" id="assistant-production-time-input" step="0.1" placeholder="مثلاً: 3.0" class="w-full p-3 border border-gray-300 rounded-lg">
+                            <p class="text-xs text-gray-500 h-10">مجموع زمان صرف شده توسط نیروی کمکی</p>
                         </div>
                         <div class="space-y-2 col-span-2">
                             <label for="profit-margin" class="font-semibold text-gray-700 block text-sm">حاشیه سود مورد نظر (%):</label>
@@ -288,7 +302,8 @@
                         <div>
                             <label for="recipe-yield" class="font-semibold text-gray-700 block mb-1">بازدهی پخت (%)</label>
                             <input type="number" id="recipe-yield" required class="w-full p-3 border border-gray-300 rounded-lg bg-gray-100" placeholder="محاسبه خودکار" readonly>
-                            <p class="text-xs text-gray-500 mt-1">راهنمایی: این عدد (وزن پخته به خام) معمولاً بین ۹۰ تا ۹۵٪ است.</p>
+                            <!-- REMOVED the old note -->
+                            <p class="text-xs text-gray-500 mt-1">این عدد به صورت خودکار از تقسیم «خروجی بعد از پخت» بر مجموع وزن «مواد اولیه» محاسبه می‌شود.</p>
                         </div>
                         <div>
                             <label for="recipe-batch-size" class="font-semibold text-gray-700 block mb-1">خروجی بعد از پخت (گرم)</label>
@@ -440,7 +455,9 @@
             baseBatchWeightHidden: document.getElementById('base-batch-weight-hidden'), // ADDED
             batchMultiplierInput: document.getElementById('batch-multiplier-input'), // ADDED
             profitMargin: document.getElementById('profit-margin'),
+            setupTimeInput: document.getElementById('setup-time-input'), // ADDED
             productionTimeInput: document.getElementById('production-time-input'), 
+            cleaningTimeInput: document.getElementById('cleaning-time-input'), // ADDED
             assistantProductionTimeInput: document.getElementById('assistant-production-time-input'), // ADDED
             priceConfirmationMaterials: document.getElementById('price-confirmation-materials'),
             priceConfirmationOps: document.getElementById('price-confirmation-ops'),
@@ -1065,7 +1082,9 @@
                 dom.batchMultiplierInput.value = '1';
                 calculateTargetWeight(); // Calculate target weight based on default multiplier
                 
+                dom.setupTimeInput.value = ''; // ADDED
                 dom.productionTimeInput.value = ''; // Clear production time
+                dom.cleaningTimeInput.value = ''; // ADDED
                 dom.assistantProductionTimeInput.value = ''; // ADDED: Clear assistant time
                 await updatePriceInputs();
                 dom.calculatorStep2Combined.classList.remove('hidden');
@@ -1581,15 +1600,15 @@
                            break;
                  }
                  if(cost > 0) {
-                      totalOpCost += cost;
-                      breakdown.push({
-                           section: 'هزینه عملیاتی',
-                           name: opRate.name,
-                           quantity: quantity,
-                           unit: unit,
-                           unit_price: unit_price,
-                           total_cost: cost,
-                      });
+                     totalOpCost += cost;
+                     breakdown.push({
+                         section: 'هزینه عملیاتی',
+                         name: opRate.name,
+                         quantity: quantity,
+                         unit: unit,
+                         unit_price: unit_price,
+                         total_cost: cost,
+                     });
                  }
             }
             
@@ -1666,11 +1685,18 @@
             const recipeId = Number(dom.recipeSelect.value);
             const batchSize = Number(dom.batchSizeInput.value); // This now reads the calculated target weight
             const profitMargin = Number(dom.profitMargin.value) || 0;
-            const mainProductionTime = Number(dom.productionTimeInput.value); // RENAMED
+            
+            // --- NEW TIME CALCULATION ---
+            const setupTime = Number(dom.setupTimeInput.value) || 0;
+            const productionTime = Number(dom.productionTimeInput.value); // This is the main one, keep it required
+            const cleaningTime = Number(dom.cleaningTimeInput.value) || 0;
+            const mainProductionTime = setupTime + productionTime + cleaningTime; // SUMMING UP
+            // --- END NEW TIME CALCULATION ---
+
             const assistantProductionTime = Number(dom.assistantProductionTimeInput.value) || 0; // ADDED: Assistant time, defaults to 0 if empty
 
-            if (!recipeId || !batchSize || batchSize <= 0 || !mainProductionTime) { // MODIFIED: Check mainProductionTime
-                showToast("لطفا رسپی، وزن خروجی هدف (با ضریب معتبر)، و زمان تولید (اصلی) را وارد کنید.", "error"); // MODIFIED: Updated message
+            if (!recipeId || !batchSize || batchSize <= 0 || !productionTime) { // MODIFIED: Check only 'productionTime' as required
+                showToast("لطفا رسپی، وزن خروجی هدف (با ضریب معتبر)، و زمان تولید (خالص) را وارد کنید.", "error"); // MODIFIED: Updated message
                 return;
             }
 
