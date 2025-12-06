@@ -135,9 +135,9 @@
             </div>
             <div id="report-content" class="p-6 space-y-4 hidden">
                  <div class="grid grid-cols-2 gap-4">
-                      <div> <label class="font-semibold text-gray-700 mb-2 block">محصول</label> <select id="report-template-select" class="w-full p-3 border border-gray-300 rounded-lg bg-white"></select> </div>
-                      <div> <label class="font-semibold text-gray-700 mb-2 block">شهر</label> <select id="report-city-select" class="w-full p-3 border border-gray-300 rounded-lg bg-white"></select> </div>
-                 </div>
+                     <div> <label class="font-semibold text-gray-700 mb-2 block">محصول</label> <select id="report-template-select" class="w-full p-3 border border-gray-300 rounded-lg bg-white"></select> </div>
+                     <div> <label class="font-semibold text-gray-700 mb-2 block">شهر</label> <select id="report-city-select" class="w-full p-3 border border-gray-300 rounded-lg bg-white"></select> </div>
+                </div>
                 <div class="bg-white rounded-xl shadow-md p-6">
                     <div id="report-loader" class="flex justify-center items-center p-8"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div></div>
                     <div id="report-data-view" class="hidden">
@@ -202,12 +202,12 @@
                     <!-- New 3-column grid -->
                     <div class="grid grid-cols-3 gap-4">
                         <div class="space-y-2">
-                            <label for="base-batch-weight-display" class="font-semibold text-gray-700 block text-sm">خروجی بعد از پخت (کیلوگرم)</label>
+                            <label for="base-batch-weight-display" class="font-semibold text-gray-700 block text-sm">خروجی رسپی (کیلوگرم)</label>
                             <input type="text" id="base-batch-weight-display" class="w-full p-3 border border-gray-200 bg-gray-100 rounded-lg text-center" readonly>
                             <input type="hidden" id="base-batch-weight-hidden"> <!-- To store the raw number -->
                         </div>
                         <div class="space-y-2">
-                            <label for="batch-multiplier-input" class="font-semibold text-gray-700 block text-sm">ضریب پخت (میزان تولید چند برابر رسپی است؟)</label>
+                            <label for="batch-multiplier-input" class="font-semibold text-gray-700 block text-sm">ضریب پخت</label>
                             <input type="number" id="batch-multiplier-input" step="0.1" placeholder="مثلاً: 1.5" value="1" class="w-full p-3 border border-gray-300 rounded-lg text-center">
                         </div>
                         <div class="space-y-2">
@@ -215,6 +215,8 @@
                             <input type="text" id="batch-size" class="w-full p-3 border border-gray-200 bg-gray-100 rounded-lg text-center" readonly>
                         </div>
                     </div>
+                    <p class="text-xs text-gray-500 text-center -mt-2">تغییر ضریب، به تناسب، مواد اولیه و هزینه‌های ساعتی را تغییر می‌دهد.</p>
+
 
                     <!-- Existing fields, now in a 2-col grid -->
                     <div class="grid grid-cols-2 gap-4 pt-2">
@@ -261,9 +263,9 @@
                      <div id="calculator-loader" class="flex justify-center items-center p-8 hidden"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div></div>
                      <div id="calculator-results-content" class="hidden">
                          <!-- Summary Cards -->
-                        <div id="result-summary" class="space-y-4 text-center"></div>
-                        <!-- Details Table -->
-                        <div id="result-details" class="mt-6"></div>
+                         <div id="result-summary" class="space-y-4 text-center"></div>
+                         <!-- Details Table -->
+                         <div id="result-details" class="mt-6"></div>
                      </div>
                 </div>
             </div>
@@ -302,7 +304,6 @@
                         <div>
                             <label for="recipe-yield" class="font-semibold text-gray-700 block mb-1">بازدهی پخت (%)</label>
                             <input type="number" id="recipe-yield" required class="w-full p-3 border border-gray-300 rounded-lg bg-gray-100" placeholder="محاسبه خودکار" readonly>
-                            <!-- REMOVED the old note -->
                             <p class="text-xs text-gray-500 mt-1">این عدد به صورت خودکار از تقسیم «خروجی بعد از پخت» بر مجموع وزن «مواد اولیه» محاسبه می‌شود.</p>
                         </div>
                         <div>
@@ -310,12 +311,6 @@
                             <input type="number" id="recipe-batch-size" step="1" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="مثلاً: 100500">
                         </div>
                     </div>
-                    <!-- REMOVED Production Time
-                    <div >
-                        <label for="recipe-production-time" class="font-semibold text-gray-700 block mb-1">زمان تولید بچ (ساعت)</label>
-                        <input type="number" id="recipe-production-time" step="0.1" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="مثلاً: 4.5">
-                    </div>
-                    -->
                     
                     <hr class="my-6">
 
@@ -371,14 +366,39 @@
     <!-- Toast Notification Element -->
     <div id="toast"></div>
 
+    <script>
+        // --- Supabase Import using UMD bundle for stability ---
+        // We switch from 'import { createClient } from ... /+esm' to a traditional script tag
+        // to avoid module resolution errors in some environments.
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+        // Since we are using a UMD bundle loaded by a script tag above,
+        // we access the client factory via the global window.supabase object.
+        const { createClient } = window.supabase; 
 
         // --- Supabase Configuration ---
         const supabaseUrl = 'https://ldhjszxmqnpvozlbxbmn.supabase.co';
         const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkaGpzenhtcW5wdm96bGJ4Ym1uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0NDc0MDIsImV4cCI6MjA3MzAyMzQwMn0.LDFjHy371d3-FAumHhsAGRhLQAfO5kxYVp5sMCRJgZw';
-        const supabase = createClient(supabaseUrl, supabaseAnonKey);
+        
+        let supabase = null;
 
+        function initializeSupabaseClient() {
+            try {
+                // Attempt to create the client using the globally available createClient
+                if (typeof createClient === 'function') {
+                    return createClient(supabaseUrl, supabaseAnonKey);
+                } else {
+                    throw new Error("Supabase UMD bundle failed to expose createClient globally.");
+                }
+            } catch (e) {
+                console.error("Supabase client initialization failed:", e);
+                // On failure, display the error and return null
+                showError("خطای حیاتی: اتصال به پایگاه داده برقرار نشد. " + (e.message || "لطفا کد و کلیدهای API را بررسی کنید."));
+                return null;
+            }
+        }
+        
         // --- State Variables ---
         let user = null;
         let submissionCountThisMonth = 0;
@@ -479,7 +499,6 @@
             recipeName: document.getElementById('recipe-name'),
             recipeYield: document.getElementById('recipe-yield'),
             recipeBatchSize: document.getElementById('recipe-batch-size'),
-            // recipeProductionTime: document.getElementById('recipe-production-time'), // REMOVED
             recipeItemsContainer: document.getElementById('recipe-items-container'),
             addRecipeItemButton: document.getElementById('add-recipe-item-button'),
             saveRecipeButton: document.getElementById('save-recipe-button'),
@@ -602,8 +621,9 @@
                 case 'gr': return 'گرم';
                 case 'kg': return 'کیلوگرم';
                 case 'hour': return 'ساعت';
-                case '% از هزینه مواد': return '% از هزینه مواد';
-                case 'بسته': return 'بسته';
+                case '%_of_material_cost': return '% از هزینه مواد';
+                case 'unit': return 'بسته';
+                case 'fixed': return 'دوره';
                 default: return unit;
             }
         };
@@ -611,6 +631,10 @@
 
         // --- Data Fetching Functions ---
         async function fetchCalculatorData(userId) {
+            if (!supabase) {
+                showToast("خطا: اتصال به دیتابیس برقرار نیست.", "error");
+                return { recipes: [], rawMaterials: [], recipeItems: [], rawMaterialPrices: [], opCostTypes: [], opCostRates: [] };
+            }
             try {
                 const [
                     recipesRes,
@@ -749,6 +773,7 @@
         }
 
         async function checkUserOnMobileInput() {
+            if (!supabase) return;
             const mobile = toEnglishNumerals(dom.mobileInput.value).trim();
             const iranianMobileRegex = /^09\d{9}$/;
             dom.brandNameInput.value = '';
@@ -780,6 +805,8 @@
 
         async function handleLogin(e) {
             e.preventDefault();
+            if (!supabase) return;
+
             const mobile = toEnglishNumerals(dom.mobileInput.value).trim();
             const brandName = dom.brandNameInput.value.trim();
             const cityName = dom.cityInput.value.trim();
@@ -843,7 +870,7 @@
         }
         
         async function checkSubmissionStatus() {
-            if (!user) { 
+            if (!supabase || !user) { 
                 submissionCountThisMonth = 0; 
                 submittedVariantIdsThisMonth = [];
                 return; 
@@ -880,6 +907,7 @@
         
         async function handleSubmitPrice(e) {
             e.preventDefault();
+            if (!supabase) return;
             const price = toEnglishNumerals(dom.submitPriceInput.value.replace(/,/g, ''));
             const variantId = Number(dom.submitVariantSelect.value);
             if (!price || !variantId || !user) { 
@@ -918,6 +946,7 @@
         }
 
         async function fetchReport() {
+            if (!supabase) return;
             const templateId = Number(dom.reportTemplateSelect.value);
             const city = dom.reportCitySelect.value;
             if (!templateId || !city) return;
@@ -944,6 +973,7 @@
         }
         
         async function handleReportProductChange() {
+            if (!supabase) return;
             const templateId = Number(dom.reportTemplateSelect.value);
             dom.reportCitySelect.innerHTML = '';
             dom.reportDataView.classList.add('hidden');
@@ -984,6 +1014,7 @@
         }
 
         async function fetchAndShowHistory() {
+            if (!supabase) return;
             showPage('history-page');
             dom.historyLoader.style.display = 'flex';
             dom.historyList.innerHTML = '';
@@ -1128,7 +1159,6 @@
                     dom.recipeName.value = recipe.name;
                     dom.recipeYield.value = recipe.yield_pct;
                     dom.recipeBatchSize.value = recipe.default_batch_kg ? recipe.default_batch_kg * 1000 : ''; // Convert KG to Grams
-                    // dom.recipeProductionTime.value = recipe.production_time; // REMOVED
                     recipeItems.forEach(item => addRecipeItemRow(item.raw_material_id, item.quantity));
                 }
             } else {
@@ -1138,8 +1168,6 @@
             showPage('recipe-editor-page');
         }
 
-        // REMOVED old function: calculateAndUpdateBatchSize()
-        
         // NEW Function: calculateRecipeMetrics
         // This function now only calculates yield based on ingredients and output
         function calculateRecipeMetrics(changedField) {
@@ -1150,19 +1178,21 @@
             let totalRawMaterialWeightKg = 0;
             const itemRows = dom.recipeItemsContainer.querySelectorAll('.grid');
             itemRows.forEach(row => {
-                const materialId = row.querySelector('select').value;
+                const select = row.querySelector('select');
+                if (!select) return;
+                const materialId = select.value;
                 const quantityInput = row.querySelector('input[type="number"]');
                 const quantity = Number(quantityInput.value) || 0;
 
                 if (materialId && quantity > 0) {
                     const material = appData.calculatorData.rawMaterials.find(rm => rm.id == materialId);
-                    // Standardize material weight to KG
-                    if (material && material.unit && material.unit.toLowerCase() === 'gr') {
-                        totalRawMaterialWeightKg += quantity / 1000;
-                    } else if (material && material.unit && material.unit.toLowerCase() === 'kg') {
+                    // Standardize material quantity to KG
+                    if (material && material.unit && material.unit.toLowerCase() === 'kg') {
                         totalRawMaterialWeightKg += quantity;
+                    } else if (material && material.unit && material.unit.toLowerCase() === 'gr') {
+                        totalRawMaterialWeightKg += quantity / 1000;
                     } else {
-                         // Default to grams if unit is not specified or unknown (e.g. ml, pcs)
+                        // Default to grams for 'ml', 'pcs', or unknown units to convert to kg
                          totalRawMaterialWeightKg += quantity / 1000;
                     }
                 }
@@ -1220,14 +1250,14 @@
             removeBtnContainer.className = 'col-span-2 text-center'; // Adjusted
             const removeBtn = document.createElement('button');
             removeBtn.type = 'button';
-            removeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24" 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500 mx-auto"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`;
+            removeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500 mx-auto"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`;
             removeBtn.onclick = () => {
                 itemRow.remove();
                 calculateRecipeMetrics('ingredients'); // CHANGED
             };
 
-            // --- Event Listener for Select ---
-            select.addEventListener('change', () => {
+            // --- Event Listener for Select and Quantity Input ---
+            const updateItemMetrics = () => {
                 const selectedMaterialId = select.value;
                 const material = appData.calculatorData.rawMaterials.find(rm => rm.id == selectedMaterialId);
                 if (material) {
@@ -1235,9 +1265,10 @@
                 } else {
                     unitSpan.textContent = '...';
                 }
-                // Also trigger batch size recalculation
-                calculateRecipeMetrics('ingredients'); // CHANGED
-            });
+                calculateRecipeMetrics('ingredients'); 
+            };
+            select.addEventListener('change', updateItemMetrics);
+            quantityInput.addEventListener('input', updateItemMetrics);
 
             // --- Set initial value and unit ---
             if (rawMaterialId) {
@@ -1265,14 +1296,19 @@
 
         async function handleSaveRecipe(e) {
             e.preventDefault();
+            if (!supabase) return;
+
             const recipeName = dom.recipeName.value.trim();
             const yieldPct = dom.recipeYield.value;
             const batchSizeGr = dom.recipeBatchSize.value; // This is now in Grams
-            // const productionTime = dom.recipeProductionTime.value; // REMOVED
 
             if (!recipeName || !yieldPct) {
                 showToast('نام رسپی و بازدهی پخت (محاسبه شده) الزامی است.', 'error');
                 return;
+            }
+            if (Number(yieldPct) <= 0) {
+                 showToast('بازدهی پخت باید عددی بزرگتر از صفر باشد. لطفاً مواد اولیه و خروجی را بررسی کنید.', 'error');
+                 return;
             }
 
             dom.saveRecipeButton.disabled = true;
@@ -1284,7 +1320,6 @@
                     name: recipeName,
                     yield_pct: Number(yieldPct),
                     default_batch_kg: batchSizeGr ? Number(batchSizeGr) / 1000 : null, // Convert Grams to KG for saving
-                    // production_time: productionTime ? Number(productionTime) : null, // REMOVED
                 };
 
                 if (currentEditingRecipeId) {
@@ -1358,8 +1393,19 @@
                 const rateValue = latestRate ? latestRate.rate_value : '';
 
                 const wrapper = document.createElement('div');
-                const labelText = type.unit === '%_of_material_cost' ? `${type.name} (%)` : `${type.name} (تومان / ${type.unit === 'hour' ? 'ساعت' : 'واحد'})`;
-                const displayValue = type.unit === '%_of_material_cost' && rateValue ? rateValue * 100 : rateValue;
+                let labelText;
+                let displayValue;
+                
+                if (type.unit === '%_of_material_cost') {
+                    labelText = `${type.name} (% از هزینه مواد)`;
+                    displayValue = rateValue ? rateValue * 100 : '';
+                } else if (type.unit === 'hour') {
+                    labelText = `${type.name} (تومان / ساعت)`;
+                    displayValue = rateValue;
+                } else {
+                     labelText = `${type.name} (تومان / دوره تولید)`;
+                     displayValue = rateValue;
+                }
 
                 wrapper.innerHTML = `
                     <label for="op-cost-${type.id}" class="font-semibold text-gray-700 block mb-1">${labelText}</label>
@@ -1368,11 +1414,21 @@
                 `;
                 dom.opCostsContainer.appendChild(wrapper);
             });
+
+            // Re-apply Farsi formatting logic after rendering the inputs
+            dom.opCostsContainer.querySelectorAll('input[type="text"][inputmode="numeric"]').forEach(input => {
+                if (input.value) {
+                    const farsiDisplayElement = input.nextElementSibling;
+                    updateFarsiDisplay(input, farsiDisplayElement);
+                }
+            });
+
             showPage('op-costs-page');
         }
 
         async function handleSaveOpCosts(e) {
             e.preventDefault();
+            if (!supabase) return;
             dom.saveOpCostsButton.disabled = true;
             dom.saveOpCostsButton.textContent = 'در حال ذخیره...';
             
@@ -1447,6 +1503,7 @@
                     .filter(p => p.raw_material_id === item.raw_material_id)
                     .sort((a, b) => new Date(b.effective_at) - new Date(a.effective_at));
 
+                // Price is stored per KG in the DB, regardless of the material's unit
                 const pricePerKg = prices.length > 0 ? prices[0].price_per_unit : null;
 
                 latestPrices.materials.push({
@@ -1479,6 +1536,7 @@
         function populateConfirmationUI(prices) {
             let materialHTML = '<h4 class="font-bold text-gray-700">مواد اولیه</h4>';
             prices.materials.forEach(m => {
+                // Price per unit is displayed as price per KG, as that's how it's stored and overridden
                 const priceValue = m.price_per_unit !== null ? m.price_per_unit : '';
                 const missingPriceClass = !priceValue && priceValue !== 0 ? 'border-red-500 ring-2 ring-red-200' : 'border-gray-300';
                 const placeholder = !priceValue && priceValue !== 0 ? 'قیمت را وارد کنید' : '';
@@ -1498,12 +1556,22 @@
             let opsHTML = '<h4 class="font-bold text-gray-700 mt-4">هزینه‌های عملیاتی (فقط نمایش)</h4>';
             if (prices.ops.length > 0) {
                 prices.ops.forEach(o => {
-                    const label = o.unit === '%_of_material_cost' ? `${o.name} (% از مواد)` : `${o.name} (تومان / ${o.unit === 'hour' ? 'ساعت' : 'واحد'})`;
-                    const value = o.unit === '%_of_material_cost' ? o.rate_value * 100 : o.rate_value;
+                    let label, value;
+                    if (o.unit === '%_of_material_cost') {
+                        label = `${o.name} (% از مواد)`;
+                        value = o.rate_value * 100;
+                    } else if (o.unit === 'hour') {
+                         label = `${o.name} (تومان / ساعت)`;
+                         value = o.rate_value;
+                    } else {
+                         label = `${o.name} (تومان / دوره)`;
+                         value = o.rate_value;
+                    }
+                    
                     opsHTML += `
                         <div class="grid grid-cols-2 gap-2 items-center">
                             <label for="op-rate-${o.id}" class="text-sm text-gray-800">${label}</label>
-                            <input type="number" id="op-rate-${o.id}" class="w-full p-2 border border-gray-200 bg-gray-100 rounded-md text-left" value="${value}" disabled>
+                            <input type="text" id="op-rate-${o.id}" class="w-full p-2 border border-gray-200 bg-gray-100 rounded-md text-left" value="${formatNumber(value)}" disabled>
                         </div>
                     `;
                 });
@@ -1511,11 +1579,22 @@
                 opsHTML += `<p class="text-sm text-gray-500">هیچ هزینه عملیاتی ثبت نشده است. از بخش مدیریت هزینه‌ها اقدام کنید.</p>`;
             }
             dom.priceConfirmationOps.innerHTML = opsHTML;
+
+             // Re-apply Farsi formatting logic after rendering the inputs for materials
+            dom.priceConfirmationMaterials.querySelectorAll('input[type="text"][inputmode="numeric"]').forEach(input => {
+                if (input.value) {
+                    // This assumes the structure is: div > div.grid > input. The p.price-farsi-display is the next sibling of the parent div.
+                    const farsiDisplayElement = input.parentElement.parentElement.nextElementSibling;
+                    if (farsiDisplayElement) {
+                        updateFarsiDisplay(input, farsiDisplayElement);
+                    }
+                }
+            });
         }
         // --- END OF MISSING FUNCTIONS ---
 
-        // MODIFIED: Added assistantProductionTime argument
-        function calculateCost(recipeId, plannedOutputKg, mainProductionTime, assistantProductionTime, priceOverrides, profitMargin) {
+        // MODIFIED: Added setupTime, cleaningTime, and assistantProductionTime arguments
+        function calculateCost(recipeId, plannedOutputKg, setupTime, productionTime, cleaningTime, assistantProductionTime, priceOverrides, profitMargin) {
             const data = appData.calculatorData;
             const recipe = data.recipes.find(r => r.id === recipeId);
             const recipeItems = data.recipeItems.filter(i => i.recipe_id === recipeId);
@@ -1536,29 +1615,35 @@
                 } else if (unit === 'gr') {
                     quantityInKg = item.quantity / 1000;
                 } else {
-                    // Default to grams for 'ml', 'pcs', or unknown units
+                    // Default to grams for 'ml', 'pcs', or unknown units to convert to kg
                     quantityInKg = item.quantity / 1000;
                 }
 
                 // --- Scale quantity based on multiplier ---
                 // We need to find the base batch size for this recipe
-                const baseBatchSize = recipe.default_batch_kg || plannedOutputKg; // Fallback to plannedOutputKg if not set
+                const baseBatchSize = recipe.default_batch_kg || plannedOutputKg; 
                 const multiplier = (plannedOutputKg / baseBatchSize) || 1;
                 const scaledQuantityInKg = quantityInKg * multiplier;
                 // --- End scaling ---
-
 
                 const baseCost = pricePerKg * scaledQuantityInKg; // Use scaled quantity
                 const lossPct = (rawMaterial.default_loss_pct || 0) / 100;
                 const totalItemCost = baseCost * (1 + lossPct);
                 totalMaterialCost += totalItemCost;
 
+                // For breakdown, convert price_per_unit to the material's native unit if possible (gr or kg)
+                let breakdownUnitPrice = pricePerKg; // default to /kg
+                if (unit === 'gr') {
+                    // Convert stored price (per kg) to display price (per gr)
+                    breakdownUnitPrice = pricePerKg / 1000;
+                }
+
                 breakdown.push({
                     section: 'مواد اولیه',
                     name: rawMaterial.name,
-                    quantity: item.quantity * multiplier, // Store scaled quantity
+                    quantity: item.quantity * multiplier, // Store scaled quantity in native unit
                     unit: rawMaterial.unit,
-                    unit_price: rawMaterial.unit.toLowerCase() === 'gr' ? pricePerKg / 1000 : pricePerKg,
+                    unit_price: breakdownUnitPrice,
                     total_cost: totalItemCost,
                 });
             }
@@ -1566,7 +1651,8 @@
             // 2. Operational Costs - Use latest rates, not overrides
             let totalOpCost = 0;
             const opCostRates = getLatestPrices(recipeId).ops;
-
+            const totalMainProductionTime = setupTime + productionTime + cleaningTime;
+            
             for (const opRate of opCostRates) {
                  let cost = 0;
                  let quantity = 0;
@@ -1577,38 +1663,39 @@
                       case '%_of_material_cost':
                            cost = totalMaterialCost * opRate.rate_value;
                            quantity = opRate.rate_value * 100;
-                           unit = '% از هزینه مواد';
+                           unit = '%_of_material_cost';
+                           unit_price = opRate.rate_value; // Store as decimal multiplier
                            break;
                       case 'hour':
-                           // NEW LOGIC: Check if this is an assistant cost
                            let hours = 0;
                            if (opRate.name && opRate.name.includes('دستیار')) {
                                 hours = assistantProductionTime || 0; // Use assistant time
                            } else {
-                                hours = mainProductionTime || 0; // Use main time
+                                hours = totalMainProductionTime || 0; // Use main time (setup + production + cleaning)
                            }
                            
                            cost = hours * opRate.rate_value;
                            quantity = hours;
-                           unit = 'ساعت';
+                           unit = 'hour';
                            break;
-                     case 'unit':
-                     case 'fixed':
-                           cost = opRate.rate_value; // This is a fixed cost per batch, regardless of multiplier
+                      case 'unit':
+                      case 'fixed':
+                           // This is a fixed cost per batch, regardless of the multiplier in this implementation
+                           cost = opRate.rate_value; 
                            quantity = 1;
-                           unit = 'بسته';
+                           unit = 'fixed';
                            break;
                  }
                  if(cost > 0) {
-                     totalOpCost += cost;
-                     breakdown.push({
-                         section: 'هزینه عملیاتی',
-                         name: opRate.name,
-                         quantity: quantity,
-                         unit: unit,
-                         unit_price: unit_price,
-                         total_cost: cost,
-                     });
+                      totalOpCost += cost;
+                      breakdown.push({
+                           section: 'هزینه عملیاتی',
+                           name: opRate.name,
+                           quantity: quantity,
+                           unit: unit,
+                           unit_price: unit_price,
+                           total_cost: cost,
+                      });
                  }
             }
             
@@ -1647,7 +1734,6 @@
                             <tr>
                                 <th class="p-3 text-right font-semibold">قلم هزینه</th>
                                 <th class="p-3 text-center font-semibold">مقدار در تولید این محصول</th>
-                                <!-- <th class="p-3 text-center font-semibold">قیمت واحد</th> --> <!-- Removed this column -->
                                 <th class="p-3 text-left font-semibold">هزینه کل</th>
                             </tr>
                         </thead>
@@ -1656,12 +1742,24 @@
 
             results.breakdown.forEach((item, index) => {
                 const rowClass = index % 2 === 0 ? 'bg-white' : 'bg-gray-50';
-                const translatedUnit = translateUnit(item.unit); // Translate unit
+                const translatedUnit = translateUnit(item.unit); 
+                let quantityDisplay;
+
+                if (item.unit === '%_of_material_cost') {
+                    // For percentage op cost, show the percentage rate
+                    quantityDisplay = `${item.quantity.toFixed(1)}%`;
+                } else if (item.unit === 'fixed') {
+                     // For fixed cost, show the unit name translated
+                     quantityDisplay = `${translatedUnit}`;
+                } else {
+                     // For regular quantity (materials, hourly op costs)
+                     quantityDisplay = `${formatNumber(item.quantity.toFixed(1))} ${translatedUnit}`;
+                }
+
                 tableHTML += `
                     <tr class="${rowClass}">
                         <td class="p-3 font-semibold text-gray-800">${item.name} <span class="text-xs text-gray-500 font-normal">(${item.section})</span></td>
-                        <td class="p-3 text-center text-gray-600">${formatNumber(item.quantity.toFixed(1))} ${translatedUnit}</td>
-                        <!-- <td class="p-3 text-center text-gray-600">${formatNumber(Math.round(item.unit_price))}</td> --> <!-- Removed this cell -->
+                        <td class="p-3 text-center text-gray-600">${quantityDisplay}</td>
                         <td class="p-3 text-left font-bold text-gray-900">${formatNumber(Math.round(item.total_cost))}</td>
                     </tr>
                 `;
@@ -1671,7 +1769,7 @@
                         </tbody>
                         <tfoot>
                             <tr class="bg-gray-200 font-bold">
-                                <td colspan="2" class="p-3 text-right">جمع کل هزینه‌ها</td> <!-- Changed colspan from 3 to 2 -->
+                                <td colspan="2" class="p-3 text-right">جمع کل هزینه‌ها</td> 
                                 <td class="p-3 text-left">${formatNumber(Math.round(results.totalBatchCost))}</td>
                             </tr>
                         </tfoot>
@@ -1686,17 +1784,15 @@
             const batchSize = Number(dom.batchSizeInput.value); // This now reads the calculated target weight
             const profitMargin = Number(dom.profitMargin.value) || 0;
             
-            // --- NEW TIME CALCULATION ---
+            // --- TIME CALCULATION ---
             const setupTime = Number(dom.setupTimeInput.value) || 0;
-            const productionTime = Number(dom.productionTimeInput.value); // This is the main one, keep it required
+            const productionTime = Number(dom.productionTimeInput.value) || 0; 
             const cleaningTime = Number(dom.cleaningTimeInput.value) || 0;
-            const mainProductionTime = setupTime + productionTime + cleaningTime; // SUMMING UP
-            // --- END NEW TIME CALCULATION ---
-
-            const assistantProductionTime = Number(dom.assistantProductionTimeInput.value) || 0; // ADDED: Assistant time, defaults to 0 if empty
-
-            if (!recipeId || !batchSize || batchSize <= 0 || !productionTime) { // MODIFIED: Check only 'productionTime' as required
-                showToast("لطفا رسپی، وزن خروجی هدف (با ضریب معتبر)، و زمان تولید (خالص) را وارد کنید.", "error"); // MODIFIED: Updated message
+            // The actual time used for calculation is handled inside calculateCost now, but we validate inputs here
+            const assistantProductionTime = Number(dom.assistantProductionTimeInput.value) || 0; 
+            
+            if (!recipeId || !batchSize || batchSize <= 0 || productionTime <= 0) { // MODIFIED: Check productionTime as required
+                showToast("لطفا رسپی، وزن خروجی هدف (با ضریب معتبر)، و زمان تولید (خالص) را با مقادیر مثبت وارد کنید.", "error"); // MODIFIED: Updated message
                 return;
             }
 
@@ -1709,7 +1805,7 @@
                 const materialId = Number(input.dataset.id);
                 const priceValue = Number(toEnglishNumerals(input.value.replace(/,/g, '')));
 
-                if (materialId && (priceValue > 0 || priceValue === 0)) {
+                if (materialId && (priceValue >= 0 || priceValue === 0)) { // Allow 0 price
                     priceOverrides.materials[materialId] = priceValue;
                     pricesToSave.push({
                         raw_material_id: materialId,
@@ -1738,31 +1834,30 @@
                      // Save prices in the background
                      if (pricesToSave.length > 0) {
                          const { error: savePriceError } = await supabase
-                             .from('rawmaterialprices')
-                             .insert(pricesToSave);
+                              .from('rawmaterialprices')
+                              .insert(pricesToSave);
                          if (savePriceError) {
-                             console.error("Error saving raw material prices:", savePriceError);
-                             // Don't block the user, just log the error and maybe show a subtle toast.
-                             showToast('خطا در ذخیره قیمت‌های جدید.', 'error');
+                              console.error("Error saving raw material prices:", savePriceError);
+                              showToast('خطا در ذخیره قیمت‌های جدید.', 'error');
                          }
                      }
 
-                     // MODIFIED: Pass both production times
-                     const results = calculateCost(recipeId, batchSize, mainProductionTime, assistantProductionTime, priceOverrides, profitMargin);
+                     // MODIFIED: Pass all four time inputs
+                     const results = calculateCost(recipeId, batchSize, setupTime, productionTime, cleaningTime, assistantProductionTime, priceOverrides, profitMargin);
                      displayCalculationResults(results);
 
                      if (results.costPerKg > 0) {
                          const { error: logError } = await supabase
-                             .from('calculationbatches')
-                             .insert({
-                                 recipe_id: recipeId,
-                                 user_id: user.id,
-                                 final_cost_per_kg: results.costPerKg
-                                 // production_time_hours: productionTime, // Removed due to schema error
-                                 // batch_kg: batchSize // Removed due to schema error
-                             });
+                              .from('calculationbatches')
+                              .insert({
+                                   recipe_id: recipeId,
+                                   user_id: user.id,
+                                   final_cost_per_kg: results.costPerKg
+                                   // production_time_hours: productionTime, // Removed due to schema error
+                                   // batch_kg: batchSize // Removed due to schema error
+                              });
                          if (logError) {
-                             console.error("Error logging calculation:", logError);
+                              console.error("Error logging calculation:", logError);
                          }
                      }
 
@@ -1773,13 +1868,21 @@
                      showToast(error.message || 'خطا در محاسبه.', 'error');
                      dom.calculatorLoader.classList.add('hidden');
                  }
-            }, 500);
+             }, 500);
         }
 
 
         // --- App Initialization ---
         async function init() {
+            // 1. Initialize Supabase client
+            supabase = initializeSupabaseClient();
+            if (!supabase) {
+                // If initialization failed, showError was called inside initializeSupabaseClient. Stop further execution.
+                return;
+            }
+
             try {
+                // 2. Fetch static data
                 const [catRes, tempRes, varRes, cityRes] = await Promise.all([
                     supabase.from('categories').select('*'),
                     supabase.from('product_templates').select('*'),
@@ -1790,6 +1893,8 @@
                 appData.categories = catRes.data; appData.templates = tempRes.data; appData.variants = varRes.data; appData.cities = cityRes.data;
                 populateDatalist(dom.cityList, appData.cities);
                 setupEventListeners();
+                
+                // 3. Check saved user and authentication
                 const savedUser = localStorage.getItem('protein-price-user');
                 if (savedUser) {
                     const localUser = JSON.parse(savedUser);
@@ -1950,7 +2055,7 @@
                 
                 // Check if an ingredient quantity or type was changed
                 const isIngredientChange = (target.tagName === 'INPUT' && target.type === 'number' && target.closest('#recipe-items-container')) ||
-                                         (target.tagName === 'SELECT' && target.closest('#recipe-items-container'));
+                                             (target.tagName === 'SELECT' && target.closest('#recipe-items-container'));
 
                 if (isIngredientChange) {
                     // If ingredients change, recalculate Yield based on the existing Output
@@ -1959,7 +2064,6 @@
                     // If Output changes, calculate Yield
                     calculateRecipeMetrics('output');
                 }
-                // Removed check for recipe-yield as it's readonly
             });
             
             // Operational Costs Listeners
