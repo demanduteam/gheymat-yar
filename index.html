@@ -1542,12 +1542,12 @@
                 const placeholder = !priceValue && priceValue !== 0 ? 'قیمت را وارد کنید' : '';
                 
                 materialHTML += `
-                    <div> <!-- Wrapper Div -->
-                        <div class="grid grid-cols-2 gap-2 items-center">
+                    <div> <!-- Wrapper Div (input's grandparent) -->
+                        <div class="grid grid-cols-2 gap-2 items-center"> <!-- input's parent -->
                             <label for="mat-price-${m.id}" class="text-sm text-gray-800">${m.name} (تومان / کیلوگرم)</label>
                             <input type="text" inputmode="numeric" id="mat-price-${m.id}" data-id="${m.id}" data-type="material" class="w-full p-2 border rounded-md text-left ${missingPriceClass}" value="${formatNumber(priceValue)}" placeholder="${placeholder}">
                         </div>
-                        <p class="text-sm text-gray-500 mt-1 h-6 price-farsi-display"></p> <!-- Moved P tag here -->
+                        <p class="text-sm text-gray-500 mt-1 h-6 price-farsi-display"></p> <!-- The correct next sibling of the input's parent -->
                     </div>
                 `;
             });
@@ -1580,11 +1580,11 @@
             }
             dom.priceConfirmationOps.innerHTML = opsHTML;
 
-             // Re-apply Farsi formatting logic after rendering the inputs for materials
+             // FIX: Correctly access the Farsi display element. It is the next sibling of the input's parent (div.grid).
             dom.priceConfirmationMaterials.querySelectorAll('input[type="text"][inputmode="numeric"]').forEach(input => {
                 if (input.value) {
-                    // This assumes the structure is: div > div.grid > input. The p.price-farsi-display is the next sibling of the parent div.
-                    const farsiDisplayElement = input.parentElement.parentElement.nextElementSibling;
+                    // input.parentElement is the div.grid. input.parentElement.nextElementSibling is the <p> tag.
+                    const farsiDisplayElement = input.parentElement.nextElementSibling; 
                     if (farsiDisplayElement) {
                         updateFarsiDisplay(input, farsiDisplayElement);
                     }
@@ -2089,10 +2089,15 @@
                     if (input.nextElementSibling && input.nextElementSibling.classList.contains('price-farsi-display')) {
                         farsiDisplayElement = input.nextElementSibling;
                     } 
-                    // Check for materials structure (div.grid -> p)
-                    else if (input.parentElement && input.parentElement.parentElement && input.parentElement.parentElement.nextElementSibling && input.parentElement.parentElement.nextElementSibling.classList.contains('price-farsi-display')) {
-                        farsiDisplayElement = input.parentElement.parentElement.nextElementSibling;
+                    // Check for materials structure (input is inside div.grid, p is sibling of div.grid)
+                    else if (input.parentElement && input.parentElement.classList.contains('grid')) {
+                        farsiDisplayElement = input.parentElement.nextElementSibling;
                     }
+                    // Check for the single submission price input:
+                    else if (input.id === 'submit-price-input') {
+                        farsiDisplayElement = document.getElementById('submit-price-farsi');
+                    }
+
 
                     if (value === '' || isNaN(value)) {
                         if (input.value !== '') input.value = '';
@@ -2118,6 +2123,7 @@
             // Apply formatter to dynamic containers
             dom.priceConfirmationMaterials.addEventListener('input', numberInputFormatter);
             dom.opCostsContainer.addEventListener('input', numberInputFormatter);
+            dom.submitPriceInput.addEventListener('input', numberInputFormatter); // Ensure main input is covered too.
         }
         
         document.addEventListener('DOMContentLoaded', init);
